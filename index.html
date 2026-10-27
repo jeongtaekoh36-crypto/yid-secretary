@@ -7,6 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="영일대향수공방" />
   <title>영일대향수공방 사장님 비서</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
       --bg: #FAF6F0;
@@ -616,12 +617,32 @@
 </head>
 <body>
 
-  <!-- 🔒 비밀번호(0306) 잠금 화면 -->
+  <!-- 🔒 구글 로그인 + 비밀번호(0306) 잠금 화면 -->
   <div id="pinOverlay" class="pin-overlay" style="display: none;">
     <div class="pin-card">
       <div style="font-size: 36px; margin-bottom: 6px;">🌸</div>
       <h2 style="margin: 0 0 6px; font-size: 20px; color: var(--primary-dark);">영일대향수공방 사장님 비서</h2>
-      <p style="margin: 0; font-size: 13.5px; color: var(--text-sub);">사장님 전용 비밀번호 4자리를 입력해 주세요</p>
+      <p id="lockSubText" style="margin: 0; font-size: 13.5px; color: var(--text-sub);">구글 계정 로그인 또는 비밀번호를 입력해 주세요</p>
+
+      <!-- 🛡️ 구글 로그인 영역 (클라이언트 ID 등록 시 활성화) -->
+      <div id="googleLoginSection" style="margin: 16px 0 10px; padding: 14px; background: #FAF6F0; border: 1px solid var(--border); border-radius: 16px;">
+        <div style="font-size: 12.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px;">
+          🛡️ 구글 계정 본인 인증 (보안 강화)
+        </div>
+        <div id="googleBtnContainer" style="display: flex; justify-content: center; min-height: 40px; align-items: center;">
+          <span id="googleLoginNotice" style="font-size: 12px; color: var(--text-sub);">
+            ⚙️설정에서 '구글 클라이언트 ID'를 등록하면 여기에 구글 로그인 버튼이 나타납니다.
+          </span>
+        </div>
+        <button
+          type="button"
+          id="kakaoExternalBtn"
+          onclick="openExternalBrowser()"
+          style="display:none; width:100%; margin-top:8px; padding:9px; border-radius:10px; border:1px solid #8C5A3C; background:#fff; color:#8C5A3C; font-size:12.5px; font-weight:700; cursor:pointer;"
+        >
+          🌐 크롬/사파리 외부 브라우저로 열기 (구글 로그인용)
+        </button>
+      </div>
 
       <div class="pin-dots">
         <div class="pin-dot" id="dot0"></div>
@@ -866,7 +887,21 @@
         />
         <div class="help-box">
           • <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="color:var(--primary-dark); font-weight:700;">Google AI Studio(무료 키 발급)</a>에서 발급받은 키를 넣으시면 진짜 Gemini AI가 문장을 분석합니다.<br>
-          • <code>Code.gs</code> 파일 안에 직접 넣으셨다면 이 칸은 비워두셔도 됩니다.
+          • Apps Script <code>[스크립트 속성]</code>에 넣으실 때는 속성 이름을 <b><code>GEMINI_API_KEY</code></b>로 저장해 주세요.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">3. 구글 로그인 클라이언트 ID (보안 강화용)</label>
+        <input
+          type="text"
+          id="settingGoogleClientId"
+          class="form-input"
+          placeholder="123456789-xxx.apps.googleusercontent.com"
+        />
+        <div class="help-box">
+          • <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener" style="color:var(--primary-dark); font-weight:700;">구글 클라우드 콘솔</a>에서 발급받은 <b>OAuth 2.0 클라이언트 ID(웹 애플리케이션)</b>를 넣으면 사장님 구글 계정으로만 로그인할 수 있도록 보안이 강화됩니다.<br>
+          • <b>승인된 자바스크립트 원본</b>에 <code>https://yid-secretary.vercel.app</code> 주소를 등록해 주세요.
         </div>
       </div>
 
@@ -891,6 +926,7 @@
      * 미리 넣어두셔도 되고, 그냥 화면의 [⚙️ 설정] 버튼에서 붙여넣으셔도 됩니다!
      */
     const DEFAULT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxocZmFDn6tBl1zvvdTcFT4w2LFfog7QHdUCR4kVcCRFrHE5dIVw3RuvxCRrjAUJlMj/exec";
+    const DEFAULT_GOOGLE_CLIENT_ID = "";
     const REQUIRED_PIN = "0306";
 
     // 공방 선택지 목록 (질문 2번 답변 반영)
@@ -906,6 +942,7 @@
     window.addEventListener("DOMContentLoaded", () => {
       initUrlParams();
       initPinLock();
+      initGoogleAuth();
       initChoiceChips();
       setRelativeDate(0);
       updatePeoplePreview();
@@ -920,13 +957,22 @@
     });
 
     /**
-     * URL 파라미터(?gas=...)로 접속 시 자동으로 웹 앱 주소를 저장해 휴대폰 설정을 편하게 함
+     * URL 파라미터(?gas=...&cid=...)로 접속 시 자동으로 설정값을 저장해 휴대폰 설정을 편하게 함
      */
     function initUrlParams() {
       const params = new URLSearchParams(window.location.search);
       const gasFromUrl = params.get("gas");
+      const cidFromUrl = params.get("cid");
+      let changed = false;
       if (gasFromUrl && gasFromUrl.startsWith("https://script.google.com/")) {
         localStorage.setItem("yd_gas_url", gasFromUrl.trim());
+        changed = true;
+      }
+      if (cidFromUrl && cidFromUrl.includes(".apps.googleusercontent.com")) {
+        localStorage.setItem("yd_google_client_id", cidFromUrl.trim());
+        changed = true;
+      }
+      if (changed) {
         window.history.replaceState({}, document.title, window.location.pathname);
       }
     }
@@ -937,6 +983,14 @@
 
     function getLocalGeminiKey() {
       return (localStorage.getItem("yd_gemini_key") || "").trim();
+    }
+
+    function getGoogleClientId() {
+      return (localStorage.getItem("yd_google_client_id") || DEFAULT_GOOGLE_CLIENT_ID || "").trim();
+    }
+
+    function getGoogleIdToken() {
+      return (sessionStorage.getItem("yd_google_id_token") || localStorage.getItem("yd_google_id_token") || "").trim();
     }
 
     /**
@@ -1016,9 +1070,123 @@
     function lockApp() {
       sessionStorage.removeItem("yd_unlocked");
       localStorage.removeItem("yd_unlocked_persist");
+      sessionStorage.removeItem("yd_google_id_token");
+      localStorage.removeItem("yd_google_id_token");
       currentPinInput = "";
       renderPinDots();
       document.getElementById("pinOverlay").style.display = "flex";
+      initGoogleAuth();
+    }
+
+    /**
+     * 🛡️ 구글 클라이언트 ID 기반 로그인 (Google Identity Services)
+     */
+    async function initGoogleAuth() {
+      // 카카오톡 인앱 브라우저 감지 시 외부 브라우저 열기 버튼 표시
+      if (/KAKAOTALK/i.test(navigator.userAgent)) {
+        const kakaoBtn = document.getElementById("kakaoExternalBtn");
+        if (kakaoBtn) kakaoBtn.style.display = "block";
+      }
+
+      let clientId = getGoogleClientId();
+
+      // 로컬에 클라이언트 ID가 없으면 시트 서버(스크립트 속성)에 저장된 클라이언트 ID가 있는지 조회
+      if (!clientId && getGasUrl()) {
+        try {
+          const pubRes = await callAppsScript({ action: "publicConfig" });
+          if (pubRes && pubRes.ok && pubRes.googleClientId) {
+            clientId = pubRes.googleClientId.trim();
+            localStorage.setItem("yd_google_client_id", clientId);
+          }
+        } catch (e) {
+          // 구버전 Code.gs인 경우 무시
+        }
+      }
+
+      if (!clientId) {
+        return;
+      }
+
+      renderGoogleSignInButton(clientId);
+    }
+
+    function renderGoogleSignInButton(clientId) {
+      const container = document.getElementById("googleBtnContainer");
+      if (!container) return;
+
+      let attempts = 0;
+      const timer = setInterval(() => {
+        attempts++;
+        if (window.google && window.google.accounts && window.google.accounts.id) {
+          clearInterval(timer);
+          container.innerHTML = "";
+          window.google.accounts.id.initialize({
+            client_id: clientId,
+            callback: handleGoogleCredentialResponse,
+            auto_select: false
+          });
+          window.google.accounts.id.renderButton(container, {
+            theme: "outline",
+            size: "large",
+            text: "signin_with",
+            shape: "pill",
+            width: 260,
+            locale: "ko"
+          });
+        } else if (attempts > 25) {
+          clearInterval(timer);
+        }
+      }, 200);
+    }
+
+    async function handleGoogleCredentialResponse(response) {
+      const idToken = response && response.credential ? response.credential : "";
+      if (!idToken) return;
+
+      const pinErrorEl = document.getElementById("pinError");
+      pinErrorEl.style.color = "var(--primary-dark)";
+      pinErrorEl.textContent = "⏳ 사장님 구글 계정을 확인하고 있습니다...";
+
+      try {
+        // 시트 서버에서 토큰 및 시트 소유자 이메일 검증
+        if (getGasUrl()) {
+          const verifyRes = await callAppsScript({
+            action: "verifyGoogle",
+            idToken: idToken
+          });
+          if (verifyRes && verifyRes.ok === false && verifyRes.error && !verifyRes.error.includes("알 수 없는 요청")) {
+            throw new Error(verifyRes.error);
+          }
+          if (verifyRes && verifyRes.email) {
+            localStorage.setItem("yd_google_email", verifyRes.email);
+          }
+        }
+
+        sessionStorage.setItem("yd_google_id_token", idToken);
+        sessionStorage.setItem("yd_unlocked", "true");
+        if (document.getElementById("rememberPinChk").checked) {
+          localStorage.setItem("yd_google_id_token", idToken);
+          localStorage.setItem("yd_unlocked_persist", "true");
+        }
+
+        pinErrorEl.textContent = "";
+        document.getElementById("pinOverlay").style.display = "none";
+        showToast("🛡️ 구글 계정 본인 인증으로 로그인되었습니다!");
+        updateConnectionBanner();
+        if (getGasUrl()) loadDashboard();
+      } catch (err) {
+        pinErrorEl.style.color = "var(--danger)";
+        pinErrorEl.textContent = err.message || "구글 계정 인증에 실패했습니다.";
+      }
+    }
+
+    function openExternalBrowser() {
+      const currentUrl = window.location.href;
+      if (/KAKAOTALK/i.test(navigator.userAgent)) {
+        window.location.href = "kakaotalk://web/openExternal?url=" + encodeURIComponent(currentUrl);
+      } else {
+        window.open(currentUrl, "_blank");
+      }
     }
 
     /**
@@ -1433,7 +1601,10 @@
         throw new Error("구글 시트 웹 앱 URL이 설정되지 않았습니다.");
       }
 
-      const bodyObj = Object.assign({}, payload, { pin: REQUIRED_PIN });
+      const bodyObj = Object.assign({}, payload, {
+        pin: REQUIRED_PIN,
+        idToken: getGoogleIdToken()
+      });
       const response = await fetch(gasUrl, {
         method: "POST",
         headers: {
@@ -1457,6 +1628,7 @@
     function openSettingsModal() {
       document.getElementById("settingGasUrl").value = getGasUrl();
       document.getElementById("settingGeminiKey").value = getLocalGeminiKey();
+      document.getElementById("settingGoogleClientId").value = getGoogleClientId();
       document.getElementById("settingsModal").classList.add("open");
     }
 
@@ -1467,6 +1639,7 @@
     async function saveSettings() {
       const gasUrl = document.getElementById("settingGasUrl").value.trim();
       const geminiKey = document.getElementById("settingGeminiKey").value.trim();
+      const googleClientId = document.getElementById("settingGoogleClientId").value.trim();
 
       if (gasUrl) {
         localStorage.setItem("yd_gas_url", gasUrl);
@@ -1480,17 +1653,28 @@
         localStorage.removeItem("yd_gemini_key");
       }
 
+      if (googleClientId) {
+        localStorage.setItem("yd_google_client_id", googleClientId);
+        renderGoogleSignInButton(googleClientId);
+      } else {
+        localStorage.removeItem("yd_google_client_id");
+      }
+
       updateConnectionBanner();
       closeSettingsModal();
 
       if (gasUrl) {
         showToast("⏳ 구글 시트와 연결을 확인하고 있습니다...");
         try {
-          if (geminiKey) {
-            await callAppsScript({ action: "saveApiKey", geminiApiKey: geminiKey });
+          if (geminiKey || googleClientId) {
+            await callAppsScript({
+              action: "saveApiKey",
+              geminiApiKey: geminiKey,
+              googleClientId: googleClientId
+            });
           }
           await loadDashboard();
-          showToast("✅ 구글 시트 연결이 완료되었습니다!");
+          showToast("✅ 구글 시트 및 보안 설정이 저장되었습니다!");
         } catch (err) {
           alert("연결 확인 중 오류가 발생했습니다: " + err.message);
         }
@@ -1506,7 +1690,12 @@
 
       if (gasUrl) {
         banner.classList.add("connected");
-        text.innerHTML = "✅ <b>「영일대향수공방 매출 장부」</b> 시트와 연결되어 있습니다.";
+        const verifiedEmail = localStorage.getItem("yd_google_email");
+        if (verifiedEmail && getGoogleIdToken()) {
+          text.innerHTML = `✅ <b>「영일대향수공방 매출 장부」</b> 연결됨 (🛡️ ${escapeHtml(verifiedEmail)})`;
+        } else {
+          text.innerHTML = "✅ <b>「영일대향수공방 매출 장부」</b> 시트와 연결되어 있습니다.";
+        }
       } else {
         banner.classList.remove("connected");
         text.textContent = "⚠️ 구글 시트 웹 앱 주소(URL)를 먼저 연결해 주세요.";
@@ -1515,12 +1704,16 @@
 
     function copyMagicLink() {
       const gasUrl = document.getElementById("settingGasUrl").value.trim() || getGasUrl();
+      const googleClientId = document.getElementById("settingGoogleClientId").value.trim() || getGoogleClientId();
       if (!gasUrl) {
         alert("먼저 1번 칸에 구글 시트 웹 앱 URL을 붙여넣어 주세요!");
         return;
       }
       const base = window.location.origin + window.location.pathname;
-      const magicUrl = base + "?gas=" + encodeURIComponent(gasUrl);
+      let magicUrl = base + "?gas=" + encodeURIComponent(gasUrl);
+      if (googleClientId) {
+        magicUrl += "&cid=" + encodeURIComponent(googleClientId);
+      }
       navigator.clipboard.writeText(magicUrl).then(() => {
         showToast("📱 자동연결 링크 복사 완료! 카카오톡 '나와의 채팅'에 보내고 휴대폰에서 여세요.");
       }).catch(() => {

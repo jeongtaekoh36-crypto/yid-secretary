@@ -18,8 +18,11 @@ const SHEET_NAME = '매출내역';        // 데이터가 저장될 하단 시�
 const ACCESS_PIN = '0306';            // 사장님 전용 비밀번호
 const TIMEZONE = 'Asia/Seoul';        // 한국 시간 기준
 
-// 2. 구글 제미나이(Gemini) API 키 (선택: 여기에 직접 넣으시거나, 웹 화면 [⚙️설정]에서 넣으셔도 됩니다)
+// 2. 구글 제미나이(Gemini) API 키 & 구글 로그인 클라이언트 ID
+// (여기에 직접 넣으시거나, Apps Script [스크립트 속성] 또는 앱 [⚙️설정]에 넣으셔도 자동 인식됩니다)
 const DEFAULT_GEMINI_API_KEY = '';
+const DEFAULT_GOOGLE_CLIENT_ID = '';
+const ALLOWED_EMAILS = []; // 비워두면 이 시트 주인(사장님 구글 계정) 이메일만 자동 허용됩니다.
 
 // 공방 기본 선택지
 const CATEGORIES = ['원데이 클래스', '커플 클래스', '단체/출강', '완제품 판매', '답례품', '키즈 클래스', '기타'];
@@ -72,10 +75,35 @@ function doPost(e) {
     const raw = (e && e.postData && e.postData.contents) ? e.postData.contents : '{}';
     const body = JSON.parse(raw);
     const action = body.action || '';
-    const pin = String(body.pin || '').trim();
 
-    if (pin !== ACCESS_PIN) {
-      return jsonResponse({ ok: false, error: '비밀번호가 올바르지 않습니다.' });
+    // 0) 로그인 화면 초기 설정 조회 (구글 클라이언트 ID 유무 확인용 - 민감 정보 제외)
+    if (action === 'publicConfig') {
+      const gClientId = getGoogleClientId();
+      return jsonResponse({
+        ok: true,
+        googleClientId: gClientId,
+        hasGoogleClientId: Boolean(gClientId),
+        hasApiKey: Boolean(getGeminiApiKey())
+      });
+    }
+
+    // 0-1) 구글 로그인 토큰 검증 요청
+    if (action === 'verifyGoogle') {
+      const verifyResult = verifyGoogleIdToken(String(body.idToken || '').trim());
+      if (!verifyResult.ok) {
+        return jsonResponse({ ok: false, error: verifyResult.error });
+      }
+      return jsonResponse({
+        ok: true,
+        email: verifyResult.email,
+        name: verifyResult.name
+      });
+    }
+
+    // 공통 보안 인증 (구글 계정 ID 토큰 검증 또는 비밀번호 검증)
+    const authCheck = verifyRequestAuth(body);
+    if (!authCheck.ok) {
+      return jsonResponse({ ok: false, error: authCheck.error });
     }
 
     // 1) 음성/문장 AI 자동 분석
@@ -114,16 +142,21 @@ function doPost(e) {
       return jsonResponse(getDashboardData());
     }
 
-    // 4) Gemini API 키 저장 및 연결 확인
+    // 4) Gemini API 키 및 구글 클라이언트 ID 저장
     if (action === 'saveApiKey') {
       const newKey = String(body.geminiApiKey || '').trim();
       if (newKey) {
         PropertiesService.getScriptProperties().setProperty('GEMINI_API_KEY', newKey);
       }
+      const newClientId = String(body.googleClientId || '').trim();
+      if (newClientId) {
+        PropertiesService.getScriptProperties().setProperty('GOOGLE_CLIENT_ID', newClientId);
+      }
       return jsonResponse({
         ok: true,
         hasApiKey: Boolean(getGeminiApiKey()),
-        message: 'Gemini API 키가 안전하게 저장되었습니다.'
+        googleClientId: getGoogleClientId(),
+        message: '보안 및 AI 설정이 시트 서버에 안전하게 저장되었습니다.'
       });
     }
 
@@ -148,12 +181,100 @@ function doPost(e) {
 }
 
 /**
+ * 요청 보안 검증:
+ * 1) 구글 로그인 ID 토큰(idToken)이 있으면 구글 공식 서버로 검증 + 시트 소유자 이메일 대조
+ * 2) 구글 클라이언트 ID가 설정된 상태에서 PIN(0306)만 보낸 경우에도 이중 확인 지원
+ */
+function verifyRequestAuth(body) {
+  const idToken = String(body.idToken || '').trim();
+  const pin = String(body.pin || '').trim();
+
+  if (idToken) {
+    const googleCheck = verifyGoogleIdToken(idToken);
+    if (googleCheck.ok) {
+      return { ok: true, method: 'google', email: googleCheck.email };
+    }
+    // 토큰이 만료되었더라도 PIN이 맞고 강제모드가 아니면 통과, 아니면 재로그인 안내
+    if (pin !== ACCESS_PIN) {
+      return { ok: false, error: googleCheck.error || '구글 로그인 세션이 만료되었습니다. 다시 로그인해 주세요.' };
+    }
+  }
+
+  if (pin === ACCESS_PIN) {
+    return { ok: true, method: 'pin' };
+  }
+
+  return { ok: false, error: '인증 정보가 올바르지 않습니다. (구글 로그인 또는 비밀번호 확인)' };
+}
+
+/**
+ * 구글 ID 토큰(JWT)을 구글 공식 엔드포인트로 검증하고 사장님 본인 이메일인지 확인
+ */
+function verifyGoogleIdToken(idToken) {
+  if (!idToken) {
+    return { ok: false, error: '구글 로그인 토큰이 없습니다.' };
+  }
+  const verifyUrl = 'https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(idToken);
+  const res = UrlFetchApp.fetch(verifyUrl, { muteHttpExceptions: true });
+  if (res.getResponseCode() !== 200) {
+    return { ok: false, error: '유효하지 않거나 만료된 구글 로그인 토큰입니다.' };
+  }
+
+  const info = JSON.parse(res.getContentText());
+  const configuredClientId = getGoogleClientId();
+  if (configuredClientId && info.aud !== configuredClientId) {
+    return { ok: false, error: '클라이언트 ID가 일치하지 않습니다.' };
+  }
+
+  const userEmail = String(info.email || '').toLowerCase().trim();
+  const ownerEmail = String(Session.getEffectiveUser().getEmail() || '').toLowerCase().trim();
+  const allowedList = ALLOWED_EMAILS.map(function(e) { return String(e).toLowerCase().trim(); });
+
+  if (ownerEmail && userEmail !== ownerEmail && allowedList.indexOf(userEmail) === -1) {
+    return {
+      ok: false,
+      error: '접근 권한이 없는 구글 계정입니다 (' + userEmail + '). 시트 소유자 계정(' + ownerEmail + ')으로 로그인해 주세요.'
+    };
+  }
+
+  return {
+    ok: true,
+    email: userEmail,
+    name: info.name || userEmail
+  };
+}
+
+/**
  * JSON 응답 생성 헬퍼
  */
 function jsonResponse(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * 저장된 구글 로그인 클라이언트 ID 가져오기
+ */
+function getGoogleClientId() {
+  if (DEFAULT_GOOGLE_CLIENT_ID && DEFAULT_GOOGLE_CLIENT_ID.trim() !== '') {
+    return DEFAULT_GOOGLE_CLIENT_ID.trim();
+  }
+  const scriptProps = PropertiesService.getScriptProperties();
+  const directId = scriptProps.getProperty('GOOGLE_CLIENT_ID') ||
+                   scriptProps.getProperty('CLIENT_ID') ||
+                   scriptProps.getProperty('OAUTH_CLIENT_ID');
+  if (directId && directId.trim() !== '') {
+    return directId.trim();
+  }
+  const allProps = scriptProps.getProperties();
+  for (const k in allProps) {
+    const val = String(allProps[k] || '').trim();
+    if (val.indexOf('.apps.googleusercontent.com') !== -1) {
+      return val;
+    }
+  }
+  return '';
 }
 
 /**
@@ -171,11 +292,12 @@ function getGeminiApiKey() {
   if (directKey && directKey.trim() !== '') {
     return directKey.trim();
   }
-  // 속성 이름을 다르게 저장하셨더라도 값(AIza... 등)을 자동으로 찾아서 인식
+  // 속성 이름을 다르게 저장하셨더라도 값(AIza... 등)을 자동으로 찾아서 인식 (클라이언트 ID는 제외)
   const allProps = scriptProps.getProperties();
   for (const k in allProps) {
     const val = String(allProps[k] || '').trim();
-    if (val.indexOf('AIza') === 0 || /gemini|api|key/i.test(k)) {
+    if (val.indexOf('.apps.googleusercontent.com') !== -1) continue;
+    if (val.indexOf('AIza') === 0 || /gemini|api_key|apikey/i.test(k)) {
       if (val) return val;
     }
   }
