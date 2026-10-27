@@ -258,7 +258,7 @@ function jsonResponse(obj) {
  */
 function getGoogleClientId() {
   if (DEFAULT_GOOGLE_CLIENT_ID && DEFAULT_GOOGLE_CLIENT_ID.trim() !== '') {
-    return DEFAULT_GOOGLE_CLIENT_ID.trim();
+    return normalizeClientId(DEFAULT_GOOGLE_CLIENT_ID);
   }
   const scriptProps = PropertiesService.getScriptProperties();
   const directId = scriptProps.getProperty('GOOGLE_CLIENT_ID') ||
@@ -267,16 +267,26 @@ function getGoogleClientId() {
                    scriptProps.getProperty('yid-client') ||
                    scriptProps.getProperty('YID_CLIENT');
   if (directId && directId.trim() !== '') {
-    return directId.trim();
+    return normalizeClientId(directId);
   }
   const allProps = scriptProps.getProperties();
   for (const k in allProps) {
     const val = String(allProps[k] || '').trim();
-    if (val.indexOf('.apps.googleusercontent.com') !== -1) {
-      return val;
+    if (!val || val.indexOf('AIza') === 0) continue;
+    if (val.indexOf('.apps.googleusercontent.com') !== -1 || /yid|client/i.test(k)) {
+      return normalizeClientId(val);
     }
   }
   return '';
+}
+
+function normalizeClientId(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return '';
+  if (s.indexOf('.apps.googleusercontent.com') === -1 && /^\d+-[a-zA-Z0-9_-]+$/.test(s)) {
+    return s + '.apps.googleusercontent.com';
+  }
+  return s;
 }
 
 /**
