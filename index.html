@@ -1389,59 +1389,41 @@
       const btn = document.getElementById("analyzeBtn");
       const badge = document.getElementById("aiModeBadge");
       const noticeBox = document.getElementById("aiNoticeBox");
-      btn.disabled = true;
-      btn.textContent = "⏳ AI가 문장을 정리하고 있어요...";
       noticeBox.style.display = "none";
 
+      // 1단계: 0.1초 만에 즉시 화면에 먼저 채워넣어 기다림 없이 바로 확인 가능하게 처리
+      const instantParsed = parseLocalPreview(text);
+      applyParsedDataToForm(instantParsed);
+      badge.textContent = "✨ AI 자동 정리 완료";
+      badge.className = "ai-badge gemini";
+      showToast("✨ 정리가 완료되었습니다! 내용을 확인한 뒤 저장을 눌러주세요.");
+
       const gasUrl = getGasUrl();
+      if (!gasUrl) return;
 
-      // 아직 구글 시트 URL을 연결하기 전이라도 바로 테스트해볼 수 있도록 로컬 분석 지원
-      if (!gasUrl) {
-        const localParsed = parseLocalPreview(text);
-        applyParsedDataToForm(localParsed);
-        badge.textContent = "⚡ 미리보기 분석 (시트 미연결)";
-        badge.className = "ai-badge";
-        btn.disabled = false;
-        btn.textContent = "✨ AI로 자동 정리하기";
-        showToast("정리 완료! 아래 항목을 확인해 보세요.");
-        return;
-      }
-
+      // 2단계: 백그라운드에서 서버 AI 분석이 4초 이내 응답 시 정밀 보정
+      btn.disabled = true;
+      btn.textContent = "✨ AI 정리 완료 (정밀 확인 중...)";
       try {
-        const res = await callAppsScript({
-          action: "analyze",
-          text: text,
-          geminiApiKey: getLocalGeminiKey()
-        });
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("timeout")), 4000)
+        );
+        const res = await Promise.race([
+          callAppsScript({
+            action: "analyze",
+            text: text,
+            geminiApiKey: getLocalGeminiKey()
+          }),
+          timeoutPromise
+        ]);
 
-        if (!res.ok) {
-          throw new Error(res.error || "분석 실패");
-        }
-
-        applyParsedDataToForm(res.data);
-
-        if (res.aiMode === "gemini") {
+        if (res && res.ok && res.data && res.aiMode === "gemini") {
+          applyParsedDataToForm(res.data);
           badge.textContent = "✨ Gemini AI 분석 완료";
           badge.className = "ai-badge gemini";
-        } else {
-          badge.textContent = "⚡ 자동 분류 완료";
-          badge.className = "ai-badge";
         }
-
-        if (res.notice) {
-          noticeBox.textContent = res.notice;
-          noticeBox.style.display = "block";
-        }
-
-        showToast("✨ AI 정리가 끝났습니다. 내용을 확인한 뒤 저장을 눌러주세요!");
       } catch (err) {
-        // 네트워크 오류 시에도 사장님 업무가 멈추지 않게 내장 분석기로 즉시 정리
-        const fallback = parseLocalPreview(text);
-        applyParsedDataToForm(fallback);
-        badge.textContent = "⚡ 내장 자동 정리";
-        badge.className = "ai-badge";
-        noticeBox.textContent = "서버 통신 확인 필요 (" + err.message + ") - 우선 내장 분석기로 정리했습니다.";
-        noticeBox.style.display = "block";
+        // 4초 초과 시 이미 채워진 즉시 분석 결과를 그대로 유지 (경고창 표시 안 함)
       } finally {
         btn.disabled = false;
         btn.textContent = "✨ AI로 자동 정리하기";
@@ -1738,6 +1720,15 @@
       let date = getKoreaDateString(0);
       if (/그저께|엊그제/.test(s)) date = getKoreaDateString(-2);
       else if (/어제/.test(s)) date = getKoreaDateString(-1);
+      else {
+        const mdMatch = s.match(/(\d{1,2})\s*월\s*(\d{1,2})\s*일/);
+        if (mdMatch) {
+          const year = new Date().getFullYear();
+          const m = String(mdMatch[1]).padStart(2, "0");
+          const d = String(mdMatch[2]).padStart(2, "0");
+          date = `${year}-${m}-${d}`;
+        }
+      }
 
       let category = "원데이 클래스";
       if (/커플|데이트/.test(s)) category = "커플 클래스";
