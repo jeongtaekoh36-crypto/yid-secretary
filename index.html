@@ -1355,6 +1355,12 @@
         if (res.ok && res.dashboard) {
           renderDashboard(res.dashboard);
         }
+        if (res.ok && res.hasApiKey) {
+          const textEl = document.getElementById("connectionText");
+          if (textEl) {
+            textEl.innerHTML = "✅ <b>「영일대향수공방 매출 장부」</b> 연결됨 (✨ Gemini AI 작동 중)";
+          }
+        }
       } catch (err) {
         console.warn("대시보드 조회 오류:", err);
       }

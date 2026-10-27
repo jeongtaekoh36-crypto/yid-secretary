@@ -163,8 +163,23 @@ function getGeminiApiKey() {
   if (DEFAULT_GEMINI_API_KEY && DEFAULT_GEMINI_API_KEY.trim() !== '') {
     return DEFAULT_GEMINI_API_KEY.trim();
   }
-  const propKey = PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY');
-  return propKey ? propKey.trim() : '';
+  const scriptProps = PropertiesService.getScriptProperties();
+  const directKey = scriptProps.getProperty('GEMINI_API_KEY') ||
+                    scriptProps.getProperty('API_KEY') ||
+                    scriptProps.getProperty('GEMINI_KEY') ||
+                    scriptProps.getProperty('GOOGLE_API_KEY');
+  if (directKey && directKey.trim() !== '') {
+    return directKey.trim();
+  }
+  // 속성 이름을 다르게 저장하셨더라도 값(AIza... 등)을 자동으로 찾아서 인식
+  const allProps = scriptProps.getProperties();
+  for (const k in allProps) {
+    const val = String(allProps[k] || '').trim();
+    if (val.indexOf('AIza') === 0 || /gemini|api|key/i.test(k)) {
+      if (val) return val;
+    }
+  }
+  return '';
 }
 
 /**
