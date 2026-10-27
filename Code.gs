@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * 🌸 영일대향수공방 사장님 비서 - Google Apps Script (Code.gs)
+ * 영일대향수공방 사장님 비서 - Google Apps Script (Code.gs)
  * ============================================================================
  * [사용 방법]
  * 1. 구글 시트 「영일대향수공방 매출 장부」를 엽니다.
@@ -19,7 +19,7 @@ const ACCESS_PIN = '0306';            // 사장님 전용 비밀번호
 const TIMEZONE = 'Asia/Seoul';        // 한국 시간 기준
 
 // 2. 구글 제미나이(Gemini) API 키 & 구글 로그인 클라이언트 ID
-// (여기에 직접 넣으시거나, Apps Script [스크립트 속성] 또는 앱 [⚙️설정]에 넣으셔도 자동 인식됩니다)
+// (여기에 직접 넣으시거나, Apps Script [스크립트 속성] 또는 앱 [설정]에 넣으셔도 자동 인식됩니다)
 const DEFAULT_GEMINI_API_KEY = '';
 const DEFAULT_GOOGLE_CLIENT_ID = '';
 const ALLOWED_EMAILS = []; // 비워두면 이 시트 주인(사장님 구글 계정) 이메일만 자동 허용됩니다.
@@ -57,8 +57,8 @@ function doGet(e) {
     </style></head>
     <body>
       <div class="card">
-        <div class="badge">✅ 연결 준비 완료</div>
-        <h1>🌸 영일대향수공방 사장님 비서</h1>
+        <div class="badge">연결 준비 완료</div>
+        <h1>영일대향수공방 사장님 비서</h1>
         <p>구글 시트 웹 앱 서버가 정상 작동 중입니다.<br>지금 주소창의 URL을 복사해서 <b>사장님 비서 앱(index.html)</b>의 설정 창에 붙여넣어 주세요!</p>
       </div>
     </body>
@@ -512,7 +512,7 @@ function normalizeDateString(val) {
 
 /**
  * ============================================================================
- * 🤖 Gemini AI 분석 (API 키가 없거나 일시 오류 시 스마트 한국어 규칙 분석으로 자동 백업)
+ * Gemini AI 분석 (API 키가 없거나 일시 오류 시 스마트 한국어 규칙 분석으로 자동 백업)
  * ============================================================================
  */
 function analyzeWithAI(text) {
@@ -548,7 +548,7 @@ function analyzeWithAI(text) {
   const fallbackData = parseKoreanSalesText(text, todayStr, yesterdayStr, twoDaysAgoStr);
   return {
     aiMode: 'fallback',
-    notice: '현재 Gemini API 키가 등록되지 않아 기본 자동 분류로 정리했습니다. (⚙️설정에서 Gemini 키를 넣으시면 진짜 AI 분석이 켜집니다!)',
+    notice: '현재 Gemini API 키가 등록되지 않아 기본 자동 분류로 정리했습니다. (설정에서 Gemini 키를 넣으시면 진짜 AI 분석이 켜집니다.)',
     data: fallbackData
   };
 }
