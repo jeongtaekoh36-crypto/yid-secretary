@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#8C5A3C" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="영일대향수공방" />
+  <title>영일대향수공방 사장님 비서</title>
+  <style>
+    :root {
+      --bg: #FAF6F0;
+      --card: #FFFFFF;
+      --primary: #8C5A3C;
+      --primary-dark: #6E4329;
+      --primary-light: #F5EBE1;
+      --accent: #C87D55;
+      --text: #2E241E;
+      --text-sub: #7A6A5E;
+      --border: #E8DEC8;
+      --success: #2E7D32;
+      --success-bg: #E8F5E9;
+      --danger: #C62828;
+      --shadow: 0 8px 24px rgba(61, 43, 31, 0.07);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+
+    .container {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* 상단 헤더 */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, #8C5A3C 0%, #A9714B 100%);
+      color: #fff;
+      padding: 18px 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .header-title h1 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .header-title p {
+      margin: 3px 0 0;
+      font-size: 12.5px;
+      opacity: 0.9;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      color: #fff;
+      border-radius: 12px;
+      padding: 8px 11px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .icon-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* 연결 상태 알림 배너 */
+    .status-banner {
+      background: #FFF8E7;
+      border: 1px solid #F0D999;
+      color: #7A5800;
+      padding: 12px 15px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .status-banner.connected {
+      background: #EDF7ED;
+      border-color: #B8DFB9;
+      color: #1E5622;
+    }
+
+    .status-banner button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 7px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* 공통 카드 */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 16.5px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0;
+    }
+
+    .step-badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    /* 음성 입력 버튼 */
+    .voice-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mic-btn {
+      width: 100%;
+      padding: 18px 16px;
+      border-radius: 16px;
+      border: 2px solid var(--primary);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .mic-btn.listening {
+      background: #FFEBEE;
+      border-color: #E53935;
+      color: #C62828;
+      animation: pulse 1.4s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.35); }
+      70% { box-shadow: 0 0 0 12px rgba(229, 57, 53, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0); }
+    }
+
+    .speech-textarea {
+      width: 100%;
+      min-height: 82px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--text);
+      resize: vertical;
+      background: #FCFBF9;
+    }
+
+    .speech-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    .sample-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sample-chip {
+      background: #F4EFE8;
+      border: 1px solid #E2D7C5;
+      color: var(--text-sub);
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .sample-chip:active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 16.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(140, 90, 60, 0.25);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .save-btn {
+      background: #2E6B40;
+      box-shadow: 0 4px 14px rgba(46, 107, 64, 0.28);
+      margin-top: 8px;
+      font-size: 17px;
+      padding: 17px;
+    }
+
+    /* 2단계 확인 폼 */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 7px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 7px;
+    }
+
+    .choice-chip {
+      padding: 8px 13px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: #FAF8F5;
+      color: var(--text);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .choice-chip.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .inline-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .step-btn {
+      padding: 10px 15px;
+      border-radius: 11px;
+      border: 1.5px solid var(--border);
+      background: #FAF7F2;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      cursor: pointer;
+      min-width: 46px;
+    }
+
+    .step-btn:active {
+      background: var(--primary-light);
+    }
+
+    .ai-badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #EFEBE9;
+      color: #5D4037;
+    }
+
+    .ai-badge.gemini {
+      background: #E8F0FE;
+      color: #1967D2;
+    }
+
+    /* 매출 요약 대시보드 */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .summary-box {
+      background: #FBF8F3;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .summary-box .label {
+      font-size: 12.5px;
+      color: var(--text-sub);
+      font-weight: 700;
+    }
+
+    .summary-box .amount {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin: 4px 0 2px;
+    }
+
+    .summary-box .meta {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    /* 최근 5건 내역 리스트 */
+    .recent-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .recent-item {
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 12px 14px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .recent-main {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .recent-top {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .recent-date {
+      font-size: 12px;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    .recent-cat {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .recent-sub {
+      font-size: 12.5px;
+      color: var(--text-sub);
+    }
+
+    .recent-memo {
+      font-size: 12px;
+      color: var(--primary);
+      background: var(--primary-light);
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-top: 2px;
+    }
+
+    .recent-right {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .recent-price {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .delete-btn {
+      margin-top: 4px;
+      background: none;
+      border: 1px solid #E0CFC2;
+      color: #9E7B66;
+      border-radius: 7px;
+      padding: 3px 8px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px 12px;
+      color: var(--text-sub);
+      font-size: 13.5px;
+    }
+
+    /* 토스트 알림 */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(46, 36, 30, 0.94);
+      color: #fff;
+      padding: 13px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      z-index: 2000;
+      transition: transform 0.28s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      max-width: 90vw;
+      text-align: center;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* 비밀번호(PIN) 잠금 화면 */
+    .pin-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 1500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .pin-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 30px 24px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .pin-dots {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .pin-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+      background: transparent;
+    }
+
+    .pin-dot.filled {
+      background: var(--primary);
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .key-btn {
+      padding: 16px 0;
+      font-size: 20px;
+      font-weight: 700;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #FAF7F2;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .key-btn:active {
+      background: var(--primary-light);
+    }
+
+    /* 모달 창 (설정) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 1200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+    }
+
+    .help-box {
+      background: #FAF6F0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 12.5px;
+      color: var(--text-sub);
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔒 비밀번호(0306) 잠금 화면 -->
+  <div id="pinOverlay" class="pin-overlay" style="display: none;">
+    <div class="pin-card">
+      <div style="font-size: 36px; margin-bottom: 6px;">🌸</div>
+      <h2 style="margin: 0 0 6px; font-size: 20px; color: var(--primary-dark);">영일대향수공방 사장님 비서</h2>
+      <p style="margin: 0; font-size: 13.5px; color: var(--text-sub);">사장님 전용 비밀번호 4자리를 입력해 주세요</p>
+
+      <div class="pin-dots">
+        <div class="pin-dot" id="dot0"></div>
+        <div class="pin-dot" id="dot1"></div>
+        <div class="pin-dot" id="dot2"></div>
+        <div class="pin-dot" id="dot3"></div>
+      </div>
+
+      <div id="pinError" style="color: var(--danger); font-size: 13px; min-height: 20px; font-weight: 600;"></div>
+
+      <div class="keypad">
+        <button type="button" class="key-btn" onclick="pressPin('1')">1</button>
+        <button type="button" class="key-btn" onclick="pressPin('2')">2</button>
+        <button type="button" class="key-btn" onclick="pressPin('3')">3</button>
+        <button type="button" class="key-btn" onclick="pressPin('4')">4</button>
+        <button type="button" class="key-btn" onclick="pressPin('5')">5</button>
+        <button type="button" class="key-btn" onclick="pressPin('6')">6</button>
+        <button type="button" class="key-btn" onclick="pressPin('7')">7</button>
+        <button type="button" class="key-btn" onclick="pressPin('8')">8</button>
+        <button type="button" class="key-btn" onclick="pressPin('9')">9</button>
+        <button type="button" class="key-btn" style="font-size: 14px;" onclick="clearPin()">전체지움</button>
+        <button type="button" class="key-btn" onclick="pressPin('0')">0</button>
+        <button type="button" class="key-btn" style="font-size: 16px;" onclick="backspacePin()">⌫</button>
+      </div>
+
+      <label style="display:flex; align-items:center; justify-content:center; gap:6px; margin-top:16px; font-size:13px; color:var(--text-sub); cursor:pointer;">
+        <input type="checkbox" id="rememberPinChk" checked /> 이 기기에서 로그인 유지하기
+      </label>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- 상단 헤더 -->
+    <header class="header">
+      <div class="header-title">
+        <h1>🌸 영일대향수공방 사장님 비서</h1>
+        <p>말 한마디로 정리하는 「영일대향수공방 매출 장부」</p>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="icon-btn" onclick="openSettingsModal()">⚙️ 설정</button>
+        <button type="button" class="icon-btn" onclick="lockApp()" title="화면 잠금">🔒</button>
+      </div>
+    </header>
+
+    <!-- 연결 상태 배너 -->
+    <div id="connectionBanner" class="status-banner">
+      <span id="connectionText">⚠️ 구글 시트 웹 앱 주소(URL)를 먼저 연결해 주세요.</span>
+      <button type="button" onclick="openSettingsModal()">연결하기</button>
+    </div>
+
+    <!-- STEP 1. 음성으로 말하기 -->
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title"><span class="step-badge">1단계</span> 수업 끝나고 편하게 말하기</h2>
+        <span id="micSupportBadge" style="font-size:12px; color:var(--text-sub);">한국어 음성인식</span>
+      </div>
+
+      <div class="voice-box">
+        <button type="button" id="micBtn" class="mic-btn" onclick="toggleSpeechRecognition()">
+          <span id="micIcon">🎙️</span>
+          <span id="micBtnText">눌러서 말하기 (음성 입력)</span>
+        </button>
+
+        <textarea
+          id="rawSpeechInput"
+          class="speech-textarea"
+          placeholder="예: 오늘 원데이 클래스 2명 7만원 카드, 인스타 보고 옴"
+        ></textarea>
+
+        <div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:6px; font-weight:600;">💡 예시 문장 (눌러서 바로 테스트해 보세요)</div>
+          <div class="sample-chips">
+            <button type="button" class="sample-chip" onclick="fillSample('오늘 원데이 클래스 2명 7만원 카드, 인스타 보고 옴')">
+              "오늘 원데이 클래스 2명 7만원 카드, 인스타 보고 옴"
+            </button>
+            <button type="button" class="sample-chip" onclick="fillSample('오늘 커플 클래스 2명 9만원 계좌이체, 네이버 예약, 50ml 변경')">
+              "커플 2명 9만원 계좌이체 네이버예약 50ml 변경"
+            </button>
+            <button type="button" class="sample-chip" onclick="fillSample('완제품 판매 1명 4만5천원 포항사랑상품권, 지나가다 방문')">
+              "완제품 1명 4만5천원 포항사랑상품권 워크인"
+            </button>
+          </div>
+        </div>
+
+        <button type="button" id="analyzeBtn" class="primary-btn" onclick="analyzeSpeech()">
+          ✨ AI로 자동 정리하기
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 2. AI가 정리한 내용 확인 및 수정 후 시트 저장 -->
+    <section class="card" id="confirmSection">
+      <div class="card-header">
+        <h2 class="card-title"><span class="step-badge">2단계</span> 확인 후 장부에 한 줄 저장</h2>
+        <span id="aiModeBadge" class="ai-badge">대기 중</span>
+      </div>
+
+      <div id="aiNoticeBox" style="display:none; background:#FFF8E7; border:1px solid #F0D999; color:#7A5800; padding:10px 12px; border-radius:10px; font-size:12.5px; margin-bottom:14px;"></div>
+
+      <!-- 1. 날짜 -->
+      <div class="form-group">
+        <div class="form-label">
+          <span>📅 날짜</span>
+          <div style="display:flex; gap:5px;">
+            <button type="button" class="sample-chip" onclick="setRelativeDate(0)">오늘</button>
+            <button type="button" class="sample-chip" onclick="setRelativeDate(-1)">어제</button>
+            <button type="button" class="sample-chip" onclick="setRelativeDate(-2)">그저께</button>
+          </div>
+        </div>
+        <input type="date" id="fieldDate" class="form-input" />
+      </div>
+
+      <!-- 2. 구분 -->
+      <div class="form-group">
+        <div class="form-label"><span>🏷️ 구분</span></div>
+        <input type="text" id="fieldCategory" class="form-input" placeholder="예: 원데이 클래스" />
+        <div class="chip-group" id="categoryChips"></div>
+      </div>
+
+      <!-- 3. 인원 -->
+      <div class="form-group">
+        <div class="form-label"><span>👥 인원 (명)</span></div>
+        <div class="inline-controls">
+          <button type="button" class="step-btn" onclick="adjustPeople(-1)">－</button>
+          <input type="number" id="fieldPeople" class="form-input" min="1" value="2" style="text-align:center; font-weight:800;" />
+          <button type="button" class="step-btn" onclick="adjustPeople(1)">＋</button>
+          <button type="button" class="step-btn" onclick="setPeople(1)" style="font-size:13px;">1명</button>
+          <button type="button" class="step-btn" onclick="setPeople(2)" style="font-size:13px;">2명</button>
+          <button type="button" class="step-btn" onclick="setPeople(4)" style="font-size:13px;">4명</button>
+        </div>
+      </div>
+
+      <!-- 4. 금액 -->
+      <div class="form-group">
+        <div class="form-label">
+          <span>💰 금액 (원)</span>
+          <span id="amountFormattedPreview" style="color:var(--primary-dark); font-weight:800;">70,000원</span>
+        </div>
+        <input type="number" id="fieldAmount" class="form-input" step="1000" value="70000" oninput="updateAmountPreview()" style="font-weight:800; font-size:17px;" />
+        <div class="chip-group">
+          <button type="button" class="sample-chip" onclick="setAmount(35000)">35,000원</button>
+          <button type="button" class="sample-chip" onclick="setAmount(70000)">70,000원</button>
+          <button type="button" class="sample-chip" onclick="setAmount(105000)">105,000원</button>
+          <button type="button" class="sample-chip" onclick="adjustAmount(10000)">+1만</button>
+          <button type="button" class="sample-chip" onclick="adjustAmount(5000)">+5천</button>
+          <button type="button" class="sample-chip" onclick="adjustAmount(-10000)">-1만</button>
+        </div>
+      </div>
+
+      <!-- 5. 결제수단 -->
+      <div class="form-group">
+        <div class="form-label"><span>💳 결제수단</span></div>
+        <input type="text" id="fieldPayment" class="form-input" placeholder="예: 카드" />
+        <div class="chip-group" id="paymentChips"></div>
+      </div>
+
+      <!-- 6. 유입경로 -->
+      <div class="form-group">
+        <div class="form-label"><span>🚶 유입경로</span></div>
+        <input type="text" id="fieldChannel" class="form-input" placeholder="예: 인스타" />
+        <div class="chip-group" id="channelChips"></div>
+      </div>
+
+      <!-- 7. 비고(메모) -->
+      <div class="form-group">
+        <div class="form-label"><span>📝 비고 (선택 메모)</span></div>
+        <input type="text" id="fieldMemo" class="form-input" placeholder="예: 50ml 변경, 단골 손님, 선물 포장 등" />
+      </div>
+
+      <button type="button" id="saveBtn" class="primary-btn save-btn" onclick="saveRecordToSheet()">
+        📒 확인 완료! 구글 시트에 한 줄 저장하기
+      </button>
+    </section>
+
+    <!-- STEP 3. 매출 합계 및 최근 내역 5건 -->
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">📊 매출 합계 & 최근 저장 내역 5건</h2>
+        <button type="button" class="sample-chip" onclick="loadDashboard()" style="font-weight:700;">🔄 새로고침</button>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-box">
+          <div class="label">오늘 매출 합계</div>
+          <div class="amount" id="todayTotalText">0원</div>
+          <div class="meta" id="todayMetaText">0건 · 0명</div>
+        </div>
+        <div class="summary-box">
+          <div class="label">이번 달 매출 합계</div>
+          <div class="amount" id="monthTotalText">0원</div>
+          <div class="meta" id="monthMetaText">0건 · 0명</div>
+        </div>
+      </div>
+
+      <div style="font-size:13.5px; font-weight:800; color:var(--text-sub); margin-bottom:10px;">
+        최근 입력한 5건
+      </div>
+
+      <div id="recentListContainer" class="recent-list">
+        <div class="empty-state">구글 시트 연결 후 내역이 여기에 표시됩니다.</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ⚙️ 연결 설정 모달 -->
+  <div id="settingsModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="margin:0; font-size:18px; color:var(--primary-dark);">⚙️ 구글 시트 & Gemini AI 설정</h3>
+        <button type="button" onclick="closeSettingsModal()" style="background:none; border:none; font-size:20px; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">1. 구글 시트 Apps Script 웹 앱 URL (필수)</label>
+        <input
+          type="url"
+          id="settingGasUrl"
+          class="form-input"
+          placeholder="https://script.google.com/macros/s/.../exec"
+        />
+        <div class="help-box">
+          구글 시트 <b>[확장 프로그램] → [Apps Script] → [배포] → [새 배포]</b> 후 나온 <code>https://script.google.com/.../exec</code> 주소를 붙여넣어 주세요.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">2. Google Gemini API 키 (진짜 AI 분석용)</label>
+        <input
+          type="password"
+          id="settingGeminiKey"
+          class="form-input"
+          placeholder="AIzaSy... (한 번 저장하면 시트 서버에 안전하게 보관됩니다)"
+        />
+        <div class="help-box">
+          • <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="color:var(--primary-dark); font-weight:700;">Google AI Studio(무료 키 발급)</a>에서 발급받은 키를 넣으시면 진짜 Gemini AI가 문장을 분석합니다.<br>
+          • <code>Code.gs</code> 파일 안에 직접 넣으셨다면 이 칸은 비워두셔도 됩니다.
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:18px;">
+        <button type="button" class="primary-btn" onclick="saveSettings()">💾 설정 저장 및 시트 연결하기</button>
+        <button type="button" class="step-btn" style="width:100%; font-size:13.5px;" onclick="copyMagicLink()">
+          📱 내 휴대폰용 자동연결 링크 복사하기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 토스트 메시지 -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    /**
+     * ============================================================================
+     * 🌸 영일대향수공방 사장님 비서 프론트엔드 스크립트
+     * ============================================================================
+     * 원하시면 아래 DEFAULT_WEB_APP_URL 큰따옴표 안에 배포한 Apps Script 웹앱 주소를
+     * 미리 넣어두셔도 되고, 그냥 화면의 [⚙️ 설정] 버튼에서 붙여넣으셔도 됩니다!
+     */
+    const DEFAULT_WEB_APP_URL = "";
+    const REQUIRED_PIN = "0306";
+
+    // 공방 선택지 목록 (질문 2번 답변 반영)
+    const CATEGORY_OPTIONS = ["원데이 클래스", "커플 클래스", "단체/출강", "완제품 판매", "답례품", "키즈 클래스", "기타"];
+    const PAYMENT_OPTIONS = ["카드", "계좌이체", "현금", "네이버페이", "포항사랑상품권", "기타"];
+    const CHANNEL_OPTIONS = ["인스타", "네이버(검색/예약)", "당근", "지인 추천", "워크인(지나가다 방문)", "재방문", "기타"];
+
+    let currentPinInput = "";
+    let recognition = null;
+    let isListening = false;
+
+    // 초기 실행
+    window.addEventListener("DOMContentLoaded", () => {
+      initUrlParams();
+      initPinLock();
+      initChoiceChips();
+      setRelativeDate(0);
+      updateAmountPreview();
+      initSpeechRecognition();
+      updateConnectionBanner();
+
+      // 이미 인증된 상태고 웹 앱 URL이 있으면 최근 내역 자동 로드
+      if (isUnlocked() && getGasUrl()) {
+        loadDashboard();
+      }
+    });
+
+    /**
+     * URL 파라미터(?gas=...)로 접속 시 자동으로 웹 앱 주소를 저장해 휴대폰 설정을 편하게 함
+     */
+    function initUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const gasFromUrl = params.get("gas");
+      if (gasFromUrl && gasFromUrl.startsWith("https://script.google.com/")) {
+        localStorage.setItem("yd_gas_url", gasFromUrl.trim());
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+
+    function getGasUrl() {
+      return (localStorage.getItem("yd_gas_url") || DEFAULT_WEB_APP_URL || "").trim();
+    }
+
+    function getLocalGeminiKey() {
+      return (localStorage.getItem("yd_gemini_key") || "").trim();
+    }
+
+    /**
+     * 🔒 비밀번호(0306) 잠금 관리
+     */
+    function isUnlocked() {
+      return sessionStorage.getItem("yd_unlocked") === "true" ||
+             localStorage.getItem("yd_unlocked_persist") === "true";
+    }
+
+    function initPinLock() {
+      const overlay = document.getElementById("pinOverlay");
+      if (isUnlocked()) {
+        overlay.style.display = "none";
+      } else {
+        overlay.style.display = "flex";
+      }
+
+      // 키보드 숫자 입력도 지원
+      window.addEventListener("keydown", (e) => {
+        if (overlay.style.display === "none") return;
+        if (e.key >= "0" && e.key <= "9") {
+          pressPin(e.key);
+        } else if (e.key === "Backspace") {
+          backspacePin();
+        } else if (e.key === "Escape") {
+          clearPin();
+        }
+      });
+    }
+
+    function pressPin(digit) {
+      if (currentPinInput.length >= 4) return;
+      currentPinInput += digit;
+      renderPinDots();
+
+      if (currentPinInput.length === 4) {
+        if (currentPinInput === REQUIRED_PIN) {
+          sessionStorage.setItem("yd_unlocked", "true");
+          if (document.getElementById("rememberPinChk").checked) {
+            localStorage.setItem("yd_unlocked_persist", "true");
+          }
+          document.getElementById("pinOverlay").style.display = "none";
+          document.getElementById("pinError").textContent = "";
+          currentPinInput = "";
+          renderPinDots();
+          showToast("🌸 사장님 환영합니다!");
+          if (getGasUrl()) loadDashboard();
+        } else {
+          document.getElementById("pinError").textContent = "비밀번호가 맞지 않습니다. (0306)";
+          setTimeout(() => {
+            currentPinInput = "";
+            renderPinDots();
+          }, 450);
+        }
+      }
+    }
+
+    function backspacePin() {
+      currentPinInput = currentPinInput.slice(0, -1);
+      renderPinDots();
+    }
+
+    function clearPin() {
+      currentPinInput = "";
+      renderPinDots();
+    }
+
+    function renderPinDots() {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById("dot" + i);
+        if (i < currentPinInput.length) dot.classList.add("filled");
+        else dot.classList.remove("filled");
+      }
+    }
+
+    function lockApp() {
+      sessionStorage.removeItem("yd_unlocked");
+      localStorage.removeItem("yd_unlocked_persist");
+      currentPinInput = "";
+      renderPinDots();
+      document.getElementById("pinOverlay").style.display = "flex";
+    }
+
+    /**
+     * 🏷️ 선택 칩 버튼 렌더링 및 동기화
+     */
+    function initChoiceChips() {
+      renderChips("categoryChips", CATEGORY_OPTIONS, "fieldCategory", "원데이 클래스");
+      renderChips("paymentChips", PAYMENT_OPTIONS, "fieldPayment", "카드");
+      renderChips("channelChips", CHANNEL_OPTIONS, "fieldChannel", "인스타");
+    }
+
+    function renderChips(containerId, options, inputId, defaultValue) {
+      const container = document.getElementById(containerId);
+      const inputEl = document.getElementById(inputId);
+      inputEl.value = defaultValue;
+
+      container.innerHTML = "";
+      options.forEach((opt) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "choice-chip" + (opt === inputEl.value ? " active" : "");
+        btn.textContent = opt;
+        btn.onclick = () => {
+          inputEl.value = opt;
+          syncChipHighlight(containerId, opt);
+        };
+        container.appendChild(btn);
+      });
+
+      inputEl.addEventListener("input", () => {
+        syncChipHighlight(containerId, inputEl.value.trim());
+      });
+    }
+
+    function syncChipHighlight(containerId, currentValue) {
+      const container = document.getElementById(containerId);
+      const chips = container.querySelectorAll(".choice-chip");
+      chips.forEach((chip) => {
+        if (chip.textContent === currentValue) {
+          chip.classList.add("active");
+        } else {
+          chip.classList.remove("active");
+        }
+      });
+    }
+
+    /**
+     * 📅 날짜 / 인원 / 금액 편의 버튼
+     */
+    function getKoreaDateString(offsetDays = 0) {
+      const now = new Date();
+      const target = new Date(now.getTime() + offsetDays * 24 * 60 * 60 * 1000);
+      const yyyy = target.getFullYear();
+      const mm = String(target.getMonth() + 1).padStart(2, "0");
+      const dd = String(target.getDate()).padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function setRelativeDate(offsetDays) {
+      document.getElementById("fieldDate").value = getKoreaDateString(offsetDays);
+    }
+
+    function adjustPeople(delta) {
+      const el = document.getElementById("fieldPeople");
+      const cur = parseInt(el.value, 10) || 1;
+      el.value = Math.max(1, cur + delta);
+    }
+
+    function setPeople(val) {
+      document.getElementById("fieldPeople").value = val;
+    }
+
+    function setAmount(val) {
+      document.getElementById("fieldAmount").value = val;
+      updateAmountPreview();
+    }
+
+    function adjustAmount(delta) {
+      const el = document.getElementById("fieldAmount");
+      const cur = parseInt(el.value, 10) || 0;
+      el.value = Math.max(0, cur + delta);
+      updateAmountPreview();
+    }
+
+    function updateAmountPreview() {
+      const val = parseInt(document.getElementById("fieldAmount").value, 10) || 0;
+      document.getElementById("amountFormattedPreview").textContent = val.toLocaleString("ko-KR") + "원";
+    }
+
+    function fillSample(sampleText) {
+      document.getElementById("rawSpeechInput").value = sampleText;
+      analyzeSpeech();
+    }
+
+    /**
+     * 🎙️ 한국어 음성 인식 (Web Speech API)
+     */
+    function initSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const badge = document.getElementById("micSupportBadge");
+
+      if (!SpeechRecognition) {
+        badge.textContent = "키보드 마이크 사용 가능";
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.lang = "ko-KR";
+      recognition.interimResults = true;
+      recognition.continuous = false;
+
+      recognition.onstart = () => {
+        isListening = true;
+        const btn = document.getElementById("micBtn");
+        btn.classList.add("listening");
+        document.getElementById("micIcon").textContent = "🛑";
+        document.getElementById("micBtnText").textContent = "듣고 있어요... 말씀 후 멈추면 자동 입력됩니다";
+      };
+
+      recognition.onresult = (event) => {
+        let transcript = "";
+        for (let i = 0; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        document.getElementById("rawSpeechInput").value = transcript.trim();
+      };
+
+      recognition.onerror = (event) => {
+        stopListeningUI();
+        if (event.error === "not-allowed") {
+          showToast("마이크 권한을 허용해 주시거나 휴대폰 키보드의 마이크 버튼을 눌러주세요.");
+        }
+      };
+
+      recognition.onend = () => {
+        stopListeningUI();
+        const text = document.getElementById("rawSpeechInput").value.trim();
+        if (text) {
+          analyzeSpeech();
+        }
+      };
+    }
+
+    function toggleSpeechRecognition() {
+      if (!recognition) {
+        document.getElementById("rawSpeechInput").focus();
+        showToast("이 브라우저에서는 입력칸을 누른 뒤 휴대폰 키보드의 🎙️마이크 버튼을 눌러 말씀해 주세요!");
+        return;
+      }
+
+      if (isListening) {
+        recognition.stop();
+      } else {
+        try {
+          recognition.start();
+        } catch (err) {
+          recognition.stop();
+        }
+      }
+    }
+
+    function stopListeningUI() {
+      isListening = false;
+      const btn = document.getElementById("micBtn");
+      btn.classList.remove("listening");
+      document.getElementById("micIcon").textContent = "🎙️";
+      document.getElementById("micBtnText").textContent = "눌러서 말하기 (음성 입력)";
+    }
+
+    /**
+     * ✨ AI 문장 분석 요청 (서버 Gemini 호출 + 미연결 시 로컬 미리보기 지원)
+     */
+    async function analyzeSpeech() {
+      const text = document.getElementById("rawSpeechInput").value.trim();
+      if (!text) {
+        showToast("먼저 수업 내용을 말씀하시거나 입력해 주세요!");
+        document.getElementById("rawSpeechInput").focus();
+        return;
+      }
+
+      const btn = document.getElementById("analyzeBtn");
+      const badge = document.getElementById("aiModeBadge");
+      const noticeBox = document.getElementById("aiNoticeBox");
+      btn.disabled = true;
+      btn.textContent = "⏳ AI가 문장을 정리하고 있어요...";
+      noticeBox.style.display = "none";
+
+      const gasUrl = getGasUrl();
+
+      // 아직 구글 시트 URL을 연결하기 전이라도 바로 테스트해볼 수 있도록 로컬 분석 지원
+      if (!gasUrl) {
+        const localParsed = parseLocalPreview(text);
+        applyParsedDataToForm(localParsed);
+        badge.textContent = "⚡ 미리보기 분석 (시트 미연결)";
+        badge.className = "ai-badge";
+        btn.disabled = false;
+        btn.textContent = "✨ AI로 자동 정리하기";
+        showToast("정리 완료! 아래 항목을 확인해 보세요.");
+        return;
+      }
+
+      try {
+        const res = await callAppsScript({
+          action: "analyze",
+          text: text,
+          geminiApiKey: getLocalGeminiKey()
+        });
+
+        if (!res.ok) {
+          throw new Error(res.error || "분석 실패");
+        }
+
+        applyParsedDataToForm(res.data);
+
+        if (res.aiMode === "gemini") {
+          badge.textContent = "✨ Gemini AI 분석 완료";
+          badge.className = "ai-badge gemini";
+        } else {
+          badge.textContent = "⚡ 자동 분류 완료";
+          badge.className = "ai-badge";
+        }
+
+        if (res.notice) {
+          noticeBox.textContent = res.notice;
+          noticeBox.style.display = "block";
+        }
+
+        showToast("✨ AI 정리가 끝났습니다. 내용을 확인한 뒤 저장을 눌러주세요!");
+      } catch (err) {
+        // 네트워크 오류 시에도 사장님 업무가 멈추지 않게 내장 분석기로 즉시 정리
+        const fallback = parseLocalPreview(text);
+        applyParsedDataToForm(fallback);
+        badge.textContent = "⚡ 내장 자동 정리";
+        badge.className = "ai-badge";
+        noticeBox.textContent = "서버 통신 확인 필요 (" + err.message + ") - 우선 내장 분석기로 정리했습니다.";
+        noticeBox.style.display = "block";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "✨ AI로 자동 정리하기";
+      }
+    }
+
+    function applyParsedDataToForm(data) {
+      if (!data) return;
+      document.getElementById("fieldDate").value = data.date || getKoreaDateString(0);
+      document.getElementById("fieldCategory").value = data.category || "원데이 클래스";
+      document.getElementById("fieldPeople").value = data.people || 1;
+      document.getElementById("fieldAmount").value = data.amount || 0;
+      document.getElementById("fieldPayment").value = data.payment || "카드";
+      document.getElementById("fieldChannel").value = data.channel || "인스타";
+      document.getElementById("fieldMemo").value = data.memo || "";
+
+      syncChipHighlight("categoryChips", document.getElementById("fieldCategory").value);
+      syncChipHighlight("paymentChips", document.getElementById("fieldPayment").value);
+      syncChipHighlight("channelChips", document.getElementById("fieldChannel").value);
+      updateAmountPreview();
+    }
+
+    /**
+     * 📒 확인한 데이터를 구글 시트 「영일대향수공방 매출 장부」에 한 줄로 저장
+     */
+    async function saveRecordToSheet() {
+      const gasUrl = getGasUrl();
+      if (!gasUrl) {
+        openSettingsModal();
+        showToast("먼저 ⚙️설정에서 구글 시트 웹 앱 URL을 연결해 주세요!");
+        return;
+      }
+
+      const record = {
+        date: document.getElementById("fieldDate").value || getKoreaDateString(0),
+        category: document.getElementById("fieldCategory").value.trim() || "원데이 클래스",
+        people: parseInt(document.getElementById("fieldPeople").value, 10) || 1,
+        amount: parseInt(document.getElementById("fieldAmount").value, 10) || 0,
+        payment: document.getElementById("fieldPayment").value.trim() || "카드",
+        channel: document.getElementById("fieldChannel").value.trim() || "인스타",
+        memo: document.getElementById("fieldMemo").value.trim()
+      };
+
+      const saveBtn = document.getElementById("saveBtn");
+      saveBtn.disabled = true;
+      saveBtn.textContent = "⏳ 구글 시트에 저장 중...";
+
+      try {
+        const res = await callAppsScript({
+          action: "save",
+          record: record
+        });
+
+        if (!res.ok) {
+          throw new Error(res.error || "저장 실패");
+        }
+
+        // 입력창 초기화 (다음 입력 준비)
+        document.getElementById("rawSpeechInput").value = "";
+        document.getElementById("fieldMemo").value = "";
+        document.getElementById("aiModeBadge").textContent = "✅ 방금 저장됨";
+
+        if (res.dashboard) {
+          renderDashboard(res.dashboard);
+        } else {
+          loadDashboard();
+        }
+
+        showToast("🎉 「영일대향수공방 매출 장부」에 한 줄 저장되었습니다!");
+      } catch (err) {
+        alert("저장에 실패했습니다: " + err.message + "\n\n⚙️설정에서 웹 앱 URL이 정확한지 확인해 주세요.");
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "📒 확인 완료! 구글 시트에 한 줄 저장하기";
+      }
+    }
+
+    /**
+     * 📊 최근 5건 및 오늘/이번 달 합계 불러오기
+     */
+    async function loadDashboard() {
+      const gasUrl = getGasUrl();
+      if (!gasUrl) return;
+
+      try {
+        const res = await callAppsScript({ action: "summary" });
+        if (res.ok && res.dashboard) {
+          renderDashboard(res.dashboard);
+        }
+      } catch (err) {
+        console.warn("대시보드 조회 오류:", err);
+      }
+    }
+
+    function renderDashboard(dash) {
+      document.getElementById("todayTotalText").textContent = Number(dash.todayTotal || 0).toLocaleString("ko-KR") + "원";
+      document.getElementById("todayMetaText").textContent = `${dash.todayCount || 0}건 · ${dash.todayPeople || 0}명`;
+
+      document.getElementById("monthTotalText").textContent = Number(dash.monthTotal || 0).toLocaleString("ko-KR") + "원";
+      document.getElementById("monthMetaText").textContent = `${dash.monthCount || 0}건 · ${dash.monthPeople || 0}명`;
+
+      const listEl = document.getElementById("recentListContainer");
+      const recent = dash.recent || [];
+
+      if (recent.length === 0) {
+        listEl.innerHTML = `<div class="empty-state">아직 저장된 매출 내역이 없습니다. 첫 매출을 기록해 보세요!</div>`;
+        return;
+      }
+
+      listEl.innerHTML = recent.map((item) => {
+        const priceFormatted = Number(item.amount || 0).toLocaleString("ko-KR") + "원";
+        const memoHtml = item.memo
+          ? `<div><span class="recent-memo">📝 ${escapeHtml(item.memo)}</span></div>`
+          : "";
+        return `
+          <div class="recent-item">
+            <div class="recent-main">
+              <div class="recent-top">
+                <span class="recent-date">${escapeHtml(item.date)}</span>
+                <span class="recent-cat">${escapeHtml(item.category)} (${Number(item.people || 1)}명)</span>
+              </div>
+              <div class="recent-sub">
+                💳 ${escapeHtml(item.payment)} · 🚶 ${escapeHtml(item.channel)}
+              </div>
+              ${memoHtml}
+            </div>
+            <div class="recent-right">
+              <div class="recent-price">${priceFormatted}</div>
+              <button type="button" class="delete-btn" onclick="deleteRowItem(${Number(item.rowNumber)}, '${escapeHtml(item.category)}', ${Number(item.amount || 0)})">삭제</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function deleteRowItem(rowNumber, category, amount) {
+      if (!confirm(`[${category} - ${Number(amount).toLocaleString("ko-KR")}원] 내역을 구글 시트에서 삭제할까요?`)) {
+        return;
+      }
+      try {
+        const res = await callAppsScript({
+          action: "deleteRow",
+          rowNumber: rowNumber
+        });
+        if (!res.ok) throw new Error(res.error || "삭제 실패");
+        if (res.dashboard) renderDashboard(res.dashboard);
+        showToast("🗑️ 선택한 내역을 삭제했습니다.");
+      } catch (err) {
+        alert("삭제 중 오류가 발생했습니다: " + err.message);
+      }
+    }
+
+    /**
+     * 🌐 Google Apps Script 통신 헬퍼 (CORS 에러 방지를 위해 text/plain POST 사용)
+     */
+    async function callAppsScript(payload) {
+      const gasUrl = getGasUrl();
+      if (!gasUrl) {
+        throw new Error("구글 시트 웹 앱 URL이 설정되지 않았습니다.");
+      }
+
+      const bodyObj = Object.assign({}, payload, { pin: REQUIRED_PIN });
+      const response = await fetch(gasUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(bodyObj),
+        redirect: "follow"
+      });
+
+      const text = await response.text();
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        throw new Error("시트 서버 응답 형식이 올바르지 않습니다. 배포 권한이 [모든 사용자]인지 확인해 주세요.");
+      }
+    }
+
+    /**
+     * ⚙️ 설정 모달 관리
+     */
+    function openSettingsModal() {
+      document.getElementById("settingGasUrl").value = getGasUrl();
+      document.getElementById("settingGeminiKey").value = getLocalGeminiKey();
+      document.getElementById("settingsModal").classList.add("open");
+    }
+
+    function closeSettingsModal() {
+      document.getElementById("settingsModal").classList.remove("open");
+    }
+
+    async function saveSettings() {
+      const gasUrl = document.getElementById("settingGasUrl").value.trim();
+      const geminiKey = document.getElementById("settingGeminiKey").value.trim();
+
+      if (gasUrl) {
+        localStorage.setItem("yd_gas_url", gasUrl);
+      } else {
+        localStorage.removeItem("yd_gas_url");
+      }
+
+      if (geminiKey) {
+        localStorage.setItem("yd_gemini_key", geminiKey);
+      } else {
+        localStorage.removeItem("yd_gemini_key");
+      }
+
+      updateConnectionBanner();
+      closeSettingsModal();
+
+      if (gasUrl) {
+        showToast("⏳ 구글 시트와 연결을 확인하고 있습니다...");
+        try {
+          if (geminiKey) {
+            await callAppsScript({ action: "saveApiKey", geminiApiKey: geminiKey });
+          }
+          await loadDashboard();
+          showToast("✅ 구글 시트 연결이 완료되었습니다!");
+        } catch (err) {
+          alert("연결 확인 중 오류가 발생했습니다: " + err.message);
+        }
+      } else {
+        showToast("설정이 저장되었습니다.");
+      }
+    }
+
+    function updateConnectionBanner() {
+      const banner = document.getElementById("connectionBanner");
+      const text = document.getElementById("connectionText");
+      const gasUrl = getGasUrl();
+
+      if (gasUrl) {
+        banner.classList.add("connected");
+        text.innerHTML = "✅ <b>「영일대향수공방 매출 장부」</b> 시트와 연결되어 있습니다.";
+      } else {
+        banner.classList.remove("connected");
+        text.textContent = "⚠️ 구글 시트 웹 앱 주소(URL)를 먼저 연결해 주세요.";
+      }
+    }
+
+    function copyMagicLink() {
+      const gasUrl = document.getElementById("settingGasUrl").value.trim() || getGasUrl();
+      if (!gasUrl) {
+        alert("먼저 1번 칸에 구글 시트 웹 앱 URL을 붙여넣어 주세요!");
+        return;
+      }
+      const base = window.location.origin + window.location.pathname;
+      const magicUrl = base + "?gas=" + encodeURIComponent(gasUrl);
+      navigator.clipboard.writeText(magicUrl).then(() => {
+        showToast("📱 자동연결 링크 복사 완료! 카카오톡 '나와의 채팅'에 보내고 휴대폰에서 여세요.");
+      }).catch(() => {
+        prompt("아래 주소를 복사해서 휴대폰에서 열어주세요:", magicUrl);
+      });
+    }
+
+    /**
+     * 로컬 미리보기용 한국어 문장 분석기 (시트 연결 전에도 완벽하게 동작)
+     */
+    function parseLocalPreview(text) {
+      const s = String(text || "").trim();
+      let date = getKoreaDateString(0);
+      if (/그저께|엊그제/.test(s)) date = getKoreaDateString(-2);
+      else if (/어제/.test(s)) date = getKoreaDateString(-1);
+
+      let category = "원데이 클래스";
+      if (/커플|데이트/.test(s)) category = "커플 클래스";
+      else if (/단체|출강|기업|학교/.test(s)) category = "단체/출강";
+      else if (/완제품|구매|판매|디퓨저/.test(s)) category = "완제품 판매";
+      else if (/답례품|선물/.test(s)) category = "답례품";
+      else if (/키즈|어린이|아이/.test(s)) category = "키즈 클래스";
+
+      let people = 1;
+      const pMatch = s.match(/(\d+)\s*(명|분|인)/);
+      if (pMatch) {
+        people = parseInt(pMatch[1], 10);
+      } else if (/두명|두 명|둘이|커플/.test(s)) {
+        people = 2;
+      } else if (/세명|세 명|셋이/.test(s)) {
+        people = 3;
+      } else if (/네명|네 명|넷이/.test(s)) {
+        people = 4;
+      }
+
+      let amount = 0;
+      const manCheon = s.match(/(\d+)\s*만\s*(\d+)\s*천\s*원?/);
+      const manRest = s.match(/(\d+)\s*만\s*(\d{3,4})\s*원?/);
+      const manOnly = s.match(/(\d+(?:\.\d+)?)\s*만\s*원?/);
+      const rawWon = s.match(/(\d{1,3}(?:,\d{3})+|\d{4,8})\s*원?/);
+
+      if (manCheon) amount = parseInt(manCheon[1], 10) * 10000 + parseInt(manCheon[2], 10) * 1000;
+      else if (manRest) amount = parseInt(manRest[1], 10) * 10000 + parseInt(manRest[2], 10);
+      else if (manOnly) amount = Math.round(parseFloat(manOnly[1]) * 10000);
+      else if (rawWon) amount = parseInt(rawWon[1].replace(/,/g, ""), 10);
+
+      let payment = "카드";
+      if (/포항사랑|상품권|지역화폐/.test(s)) payment = "포항사랑상품권";
+      else if (/네이버\s*페이|N페이/i.test(s)) payment = "네이버페이";
+      else if (/계좌|이체|무통장|입금/.test(s)) payment = "계좌이체";
+      else if (/현금/.test(s)) payment = "현금";
+
+      let channel = "인스타";
+      if (/인스타|릴스|DM/i.test(s)) channel = "인스타";
+      else if (/네이버|블로그|예약|검색/.test(s)) channel = "네이버(검색/예약)";
+      else if (/당근/.test(s)) channel = "당근";
+      else if (/지인|소개|추천|친구/.test(s)) channel = "지인 추천";
+      else if (/워크인|지나가다|길가다|간판/.test(s)) channel = "워크인(지나가다 방문)";
+      else if (/재방문|단골/.test(s)) channel = "재방문";
+
+      let memo = "";
+      const mlMatch = s.match(/\d+\s*ml(\s*변경|\s*추가|\s*업그레이드)?/i);
+      if (mlMatch) memo = mlMatch[0].trim();
+
+      return { date, category, people, amount, payment, channel, memo };
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.remove("show");
+      }, 3200);
+    }
+  </script>
+</body>
+</html>
