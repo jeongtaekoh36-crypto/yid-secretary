@@ -925,7 +925,8 @@
      * 원하시면 아래 DEFAULT_WEB_APP_URL 큰따옴표 안에 배포한 Apps Script 웹앱 주소를
      * 미리 넣어두셔도 되고, 그냥 화면의 [⚙️ 설정] 버튼에서 붙여넣으셔도 됩니다!
      */
-    const DEFAULT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxocZmFDn6tBl1zvvdTcFT4w2LFfog7QHdUCR4kVcCRFrHE5dIVw3RuvxCRrjAUJlMj/exec";
+    const DEFAULT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbySMPCrArCHrAQw82N-uegMIM-rbm90tcKtGUFFUdWYyD1OrSqhYyrMwVgMaZQZ_UMK/exec";
+    const OLD_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxocZmFDn6tBl1zvvdTcFT4w2LFfog7QHdUCR4kVcCRFrHE5dIVw3RuvxCRrjAUJlMj/exec";
     const DEFAULT_GOOGLE_CLIENT_ID = "";
     const REQUIRED_PIN = "0306";
 
@@ -978,7 +979,12 @@
     }
 
     function getGasUrl() {
-      return (localStorage.getItem("yd_gas_url") || DEFAULT_WEB_APP_URL || "").trim();
+      const saved = (localStorage.getItem("yd_gas_url") || "").trim();
+      if (saved === OLD_WEB_APP_URL) {
+        localStorage.setItem("yd_gas_url", DEFAULT_WEB_APP_URL);
+        return DEFAULT_WEB_APP_URL;
+      }
+      return (saved || DEFAULT_WEB_APP_URL || "").trim();
     }
 
     function getLocalGeminiKey() {

@@ -594,7 +594,7 @@ ${text}
 {"date":"YYYY-MM-DD","category":"...","people":2,"amount":70000,"payment":"...","channel":"...","memo":"..."}
 `.trim();
 
-  const models = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+  const models = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
   let lastError = null;
 
   for (let i = 0; i < models.length; i++) {
