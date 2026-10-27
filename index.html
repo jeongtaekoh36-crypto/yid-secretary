@@ -3,27 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#8C5A3C" />
+  <meta name="theme-color" content="#1C2B3C" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="영일대향수공방" />
-  <title>영일대향수공방 사장님 비서</title>
+  <title>영일대향수공방 | 사장님 비서</title>
+
+  <!-- 파비콘 (조향 아틀리에 퍼퓸 보틀) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233B7DDD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3h6v3H9z'/%3E%3Cpath d='M6 9h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z'/%3E%3Ccircle cx='12' cy='15' r='2'/%3E%3C/svg%3E" />
+
+  <!-- 영일대향수공방 공식 폰트: Pretendard & 고운 바탕(Gowun Batang) -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet" />
+
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
+    /* ==========================================================================
+       영일대향수공방 공식 디자인 시스템 (Design System)
+       - Primary: 오션블루 (#5D9CEC, #3B7DDD, #EBF3FD)
+       - Secondary: 코지우드 (#D4B895, #B69368, #F7F1E8)
+       - Background: 웜화이트 (#FFFDF9), Alt (#F9F5EE)
+       - Text: 다크 차콜 (#4A4A4A, #22252A), Muted (#7A7670)
+       - Border: 코지 보더 (#EAE3D8)
+       - Font: Pretendard (UI), Gowun Batang (아틀리에 감성 세리프)
+       ========================================================================== */
     :root {
-      --bg: #FAF6F0;
+      --primary: #5D9CEC;
+      --primary-dark: #3B7DDD;
+      --primary-light: #EBF3FD;
+      --secondary: #D4B895;
+      --secondary-dark: #B69368;
+      --secondary-soft: #F7F1E8;
+      --bg: #FFFDF9;
+      --bg-alt: #F9F5EE;
       --card: #FFFFFF;
-      --primary: #8C5A3C;
-      --primary-dark: #6E4329;
-      --primary-light: #F5EBE1;
-      --accent: #C87D55;
-      --text: #2E241E;
-      --text-sub: #7A6A5E;
-      --border: #E8DEC8;
+      --text: #4A4A4A;
+      --text-strong: #22252A;
+      --text-sub: #7A7670;
+      --border: #EAE3D8;
       --success: #2E7D32;
       --success-bg: #E8F5E9;
-      --danger: #C62828;
-      --shadow: 0 8px 24px rgba(61, 43, 31, 0.07);
+      --danger: #D32F2F;
+      --shadow: 0 6px 20px rgba(34, 37, 42, 0.06);
+      --shadow-lg: 0 16px 36px rgba(34, 37, 42, 0.1);
       --radius: 18px;
+
+      --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+      --font-serif: "Gowun Batang", Georgia, serif;
     }
 
     * {
@@ -34,10 +61,10 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
+      font-family: var(--font-sans);
       background-color: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.55;
       padding-bottom: 60px;
     }
 
@@ -47,30 +74,48 @@
       padding: 16px;
     }
 
-    /* 상단 헤더 */
+    /* 상단 헤더 (영일대 밤바다 & 감성 아틀리에 그라데이션) */
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: linear-gradient(135deg, #8C5A3C 0%, #A9714B 100%);
+      background: linear-gradient(135deg, #1C2B3C 0%, #26435F 55%, #3B7DDD 100%);
       color: #fff;
       padding: 18px 20px;
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      box-shadow: 0 10px 28px rgba(37, 65, 94, 0.22);
       margin-bottom: 16px;
+      border: 1px solid rgba(212, 184, 149, 0.28);
+    }
+
+    .header-logo-en {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 10.5px;
+      letter-spacing: 2px;
+      color: #D4B895;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 2px;
     }
 
     .header-title h1 {
       margin: 0;
-      font-size: 19px;
-      font-weight: 800;
+      font-family: var(--font-serif);
+      font-size: 18.5px;
+      font-weight: 700;
       letter-spacing: -0.3px;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 7px;
     }
 
     .header-title p {
       margin: 3px 0 0;
-      font-size: 12.5px;
-      opacity: 0.9;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.85);
+      font-family: var(--font-sans);
     }
 
     .header-actions {
@@ -79,8 +124,8 @@
     }
 
     .icon-btn {
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       color: #fff;
       border-radius: 12px;
       padding: 8px 11px;
@@ -90,6 +135,11 @@
       display: flex;
       align-items: center;
       gap: 4px;
+      transition: background 0.18s ease;
+    }
+
+    .icon-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
     }
 
     .icon-btn:active {
@@ -98,12 +148,12 @@
 
     /* 연결 상태 알림 배너 */
     .status-banner {
-      background: #FFF8E7;
-      border: 1px solid #F0D999;
-      color: #7A5800;
+      background: #FDF9F3;
+      border: 1px solid var(--border);
+      color: #6B5B4E;
       padding: 12px 15px;
       border-radius: 14px;
-      font-size: 13.5px;
+      font-size: 13px;
       margin-bottom: 16px;
       display: flex;
       align-items: center;
@@ -112,13 +162,13 @@
     }
 
     .status-banner.connected {
-      background: #EDF7ED;
-      border-color: #B8DFB9;
-      color: #1E5622;
+      background: #F0F7F2;
+      border-color: #C8E3CF;
+      color: #215C32;
     }
 
     .status-banner button {
-      background: var(--primary);
+      background: var(--primary-dark);
       color: #fff;
       border: none;
       border-radius: 9px;
@@ -127,6 +177,11 @@
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
+      transition: background 0.18s ease;
+    }
+
+    .status-banner button:hover {
+      background: var(--primary);
     }
 
     /* 상단 탭 네비게이션 */
@@ -134,11 +189,11 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
-      background: #EFE7DC;
-      padding: 6px;
+      background: #F2ECE3;
+      padding: 5px;
       border-radius: 18px;
       margin-bottom: 16px;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+      border: 1px solid var(--border);
     }
 
     .tab-btn {
@@ -165,9 +220,9 @@
     }
 
     .tab-btn.active {
-      background: var(--primary);
+      background: linear-gradient(135deg, #3B7DDD 0%, #5D9CEC 100%);
       color: #fff;
-      box-shadow: 0 4px 12px rgba(140, 90, 60, 0.28);
+      box-shadow: 0 4px 14px rgba(93, 156, 236, 0.35);
     }
 
     .tab-btn:active {
@@ -188,13 +243,143 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* 아틀리에 비주얼 히어로 배너 (Tab 1 상단) */
+    .atelier-hero-card {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      min-height: 154px;
+      display: flex;
+      align-items: flex-end;
+      background-color: #1C2B3C;
+    }
+
+    .atelier-hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.52;
+      transition: transform 0.4s ease;
+    }
+
+    .atelier-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(20, 32, 46, 0.2) 0%, rgba(20, 32, 46, 0.88) 100%);
+    }
+
+    .atelier-hero-body {
+      position: relative;
+      z-index: 2;
+      padding: 16px 18px;
+      color: #fff;
+      width: 100%;
+    }
+
+    .atelier-hero-tag {
+      display: inline-block;
+      font-family: var(--font-serif);
+      font-size: 10px;
+      letter-spacing: 1.8px;
+      color: #D4B895;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .atelier-hero-title {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      font-weight: 700;
+      margin: 2px 0 4px;
+      color: #FFFFFF;
+      line-height: 1.35;
+    }
+
+    .atelier-hero-desc {
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.88);
+      margin: 0 0 9px;
+      line-height: 1.4;
+    }
+
+    .atelier-hero-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .atelier-hero-chips span {
+      font-size: 11px;
+      padding: 2.5px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(4px);
+      color: #F7F1E8;
+      border: 1px solid rgba(212, 184, 149, 0.35);
+    }
+
+    /* 대시보드 탭 아틀리에 시그니처 배너 (Tab 3 상단) */
+    .dashboard-atelier-banner {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, #F8F4EC 0%, #EFE7DA 100%);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 14px;
+    }
+
+    .dashboard-atelier-img {
+      width: 54px;
+      height: 54px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid #D4B895;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .dashboard-atelier-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .dashboard-atelier-tag {
+      font-family: var(--font-serif);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: #B69368;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .dashboard-atelier-name {
+      font-family: var(--font-serif);
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--text-strong);
+    }
+
+    .dashboard-atelier-sub {
+      font-size: 11.5px;
+      color: var(--text-sub);
+    }
+
     .secondary-nav-btn {
       width: 100%;
       padding: 13px;
       border-radius: 13px;
-      border: 1.5px dashed var(--primary);
-      background: var(--primary-light);
-      color: var(--primary-dark);
+      border: 1.5px dashed var(--secondary-dark);
+      background: var(--secondary-soft);
+      color: var(--secondary-dark);
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
@@ -203,6 +388,11 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
+      transition: background 0.18s ease;
+    }
+
+    .secondary-nav-btn:hover {
+      background: #EFE7DA;
     }
 
     /* 공통 카드 */
@@ -225,16 +415,18 @@
     .card-title {
       font-size: 16.5px;
       font-weight: 800;
-      color: var(--text);
+      color: var(--text-strong);
       display: flex;
       align-items: center;
       gap: 7px;
       margin: 0;
+      font-family: var(--font-sans);
     }
 
     .step-badge {
-      background: var(--primary-light);
-      color: var(--primary);
+      background: var(--secondary-soft);
+      color: var(--secondary-dark);
+      border: 1px solid rgba(182, 147, 104, 0.3);
       font-size: 12px;
       font-weight: 800;
       padding: 3px 9px;
@@ -338,7 +530,7 @@
       padding: 16px;
       border-radius: 14px;
       border: none;
-      background: var(--primary);
+      background: linear-gradient(135deg, #3B7DDD 0%, #5D9CEC 100%);
       color: #fff;
       font-size: 16.5px;
       font-weight: 800;
@@ -347,7 +539,17 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 12px rgba(140, 90, 60, 0.25);
+      box-shadow: 0 6px 18px rgba(93, 156, 236, 0.28);
+      transition: all 0.2s ease;
+    }
+
+    .primary-btn:hover {
+      background: linear-gradient(135deg, #2E6FCF 0%, #4D8BE0 100%);
+      box-shadow: 0 8px 22px rgba(93, 156, 236, 0.35);
+    }
+
+    .primary-btn:active {
+      transform: scale(0.98);
     }
 
     .primary-btn:disabled {
@@ -356,11 +558,15 @@
     }
 
     .save-btn {
-      background: #2E6B40;
-      box-shadow: 0 4px 14px rgba(46, 107, 64, 0.28);
+      background: linear-gradient(135deg, #2E6B40 0%, #3B8550 100%);
+      box-shadow: 0 6px 18px rgba(46, 107, 64, 0.26);
       margin-top: 8px;
       font-size: 17px;
       padding: 17px;
+    }
+
+    .save-btn:hover {
+      background: linear-gradient(135deg, #255834 0%, #327344 100%);
     }
 
     /* 2단계 확인 폼 */
@@ -385,13 +591,15 @@
       border-radius: 12px;
       font-size: 16px;
       font-family: inherit;
-      color: var(--text);
+      color: var(--text-strong);
       background: #fff;
+      transition: border-color 0.2s ease;
     }
 
     .form-input:focus {
       outline: none;
-      border-color: var(--primary);
+      border-color: var(--primary-dark);
+      box-shadow: 0 0 0 3px rgba(93, 156, 236, 0.15);
     }
 
     .chip-group {
@@ -405,7 +613,7 @@
       padding: 8px 13px;
       border-radius: 10px;
       border: 1.5px solid var(--border);
-      background: #FAF8F5;
+      background: #FAF7F2;
       color: var(--text);
       font-size: 13.5px;
       font-weight: 600;
@@ -413,11 +621,16 @@
       transition: all 0.15s ease;
     }
 
+    .choice-chip:hover {
+      border-color: var(--secondary-dark);
+    }
+
     .choice-chip.active {
-      background: var(--primary);
-      border-color: var(--primary);
+      background: var(--secondary-dark);
+      border-color: var(--secondary-dark);
       color: #fff;
       font-weight: 700;
+      box-shadow: 0 2px 8px rgba(182, 147, 104, 0.28);
     }
 
     .inline-controls {
@@ -604,46 +817,101 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* 비밀번호(PIN) 잠금 화면 */
+    /* 비밀번호(PIN) 잠금 화면 (영일대 아틀리에 감성 커버) */
     .pin-overlay {
       position: fixed;
       inset: 0;
-      background: var(--bg);
+      background: radial-gradient(circle at center, rgba(30, 48, 68, 0.88) 0%, rgba(18, 28, 40, 0.97) 100%);
+      backdrop-filter: blur(8px);
       z-index: 1500;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
     }
 
     .pin-card {
-      background: #fff;
+      background: #FFFDF9;
       border: 1px solid var(--border);
       border-radius: 24px;
-      padding: 30px 24px;
+      padding: 0 0 24px;
       width: 100%;
       max-width: 360px;
       text-align: center;
-      box-shadow: var(--shadow);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.32);
+      overflow: hidden;
+    }
+
+    .pin-card-hero {
+      position: relative;
+      height: 136px;
+      background: #1C2B3C;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .pin-card-hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.65;
+    }
+
+    .pin-card-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(20, 32, 46, 0.25) 0%, rgba(255, 253, 249, 0.98) 95%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 10px 16px;
+    }
+
+    .pin-hero-en {
+      font-family: var(--font-serif);
+      font-size: 10.5px;
+      letter-spacing: 2px;
+      color: #B69368;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .pin-hero-title {
+      font-family: var(--font-serif);
+      font-size: 19.5px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin: 2px 0 0;
+    }
+
+    .pin-card-body {
+      padding: 8px 24px 0;
     }
 
     .pin-dots {
       display: flex;
       justify-content: center;
       gap: 14px;
-      margin: 20px 0;
+      margin: 18px 0;
     }
 
     .pin-dot {
       width: 16px;
       height: 16px;
       border-radius: 50%;
-      border: 2px solid var(--primary);
+      border: 2px solid var(--secondary-dark);
       background: transparent;
+      transition: all 0.2s ease;
     }
 
     .pin-dot.filled {
-      background: var(--primary);
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+      box-shadow: 0 0 10px rgba(59, 125, 221, 0.45);
     }
 
     .keypad {
@@ -654,18 +922,25 @@
     }
 
     .key-btn {
-      padding: 16px 0;
+      padding: 15px 0;
       font-size: 20px;
       font-weight: 700;
       border-radius: 14px;
       border: 1px solid var(--border);
       background: #FAF7F2;
-      color: var(--text);
+      color: var(--text-strong);
       cursor: pointer;
+      font-family: var(--font-sans);
+      transition: background 0.15s ease;
+    }
+
+    .key-btn:hover {
+      background: #F3EDE4;
     }
 
     .key-btn:active {
       background: var(--primary-light);
+      border-color: var(--primary);
     }
 
     /* 모달 창 (설정) */
@@ -708,90 +983,96 @@
 </head>
 <body>
 
-  <!-- 비밀번호 / 구글 로그인 잠금 화면 -->
+  <!-- 비밀번호 / 구글 로그인 잠금 화면 (영일대 아틀리에 감성 커버) -->
   <div id="pinOverlay" class="pin-overlay" style="display: none;">
     <div class="pin-card">
-      <div style="display:inline-flex; align-items:center; justify-content:center; width:52px; height:52px; border-radius:50%; background:var(--primary-light); color:var(--primary); margin-bottom:12px;">
-        <svg class="svg-icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 3h6v3H9z"/>
-          <path d="M6 9h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z"/>
-          <circle cx="12" cy="15" r="2"/>
-        </svg>
-      </div>
-      <h2 style="margin: 0 0 6px; font-size: 20px; color: var(--primary-dark);">영일대향수공방 사장님 비서</h2>
-      <p id="lockSubText" style="margin: 0; font-size: 13.5px; color: var(--text-sub);">비밀번호 4자리를 입력해 주세요</p>
-
-      <!-- 구글 로그인 영역 (클라이언트 ID 등록 시 활성화) -->
-      <div id="googleLoginSection" style="margin: 16px 0 10px; padding: 14px; background: #FAF6F0; border: 1px solid var(--border); border-radius: 16px;">
-        <div style="font-size: 12.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px;">
-          구글 계정 본인 인증 (보안 로그인)
+      <div class="pin-card-hero">
+        <img src="images/about-atelier.jpg" alt="영일대향수공방 조향 아틀리에" class="pin-card-hero-img" />
+        <div class="pin-card-hero-overlay">
+          <span class="pin-hero-en">YEONGILDAE ATELIER</span>
+          <h2 class="pin-hero-title">영일대향수공방</h2>
         </div>
-        <div id="googleBtnContainer" style="display: flex; justify-content: center; min-height: 40px; align-items: center;">
-          <span id="googleLoginNotice" style="font-size: 12px; color: var(--text-sub);">
-            설정에서 '구글 클라이언트 ID'를 등록하면 여기에 구글 로그인 버튼이 나타납니다.
-          </span>
+      </div>
+
+      <div class="pin-card-body">
+        <p id="lockSubText" style="margin: 6px 0 0; font-size: 13px; color: var(--text-sub);">
+          사장님 전용 보안 로그인 (비밀번호 4자리)
+        </p>
+
+        <!-- 구글 로그인 영역 (클라이언트 ID 등록 시 활성화) -->
+        <div id="googleLoginSection" style="margin: 14px 0 10px; padding: 13px; background: #FAF7F2; border: 1px solid var(--border); border-radius: 16px;">
+          <div style="font-size: 12.5px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px;">
+            구글 계정 본인 인증 (보안 로그인)
+          </div>
+          <div id="googleBtnContainer" style="display: flex; justify-content: center; min-height: 40px; align-items: center;">
+            <span id="googleLoginNotice" style="font-size: 12px; color: var(--text-sub);">
+              설정에서 '구글 클라이언트 ID'를 등록하면 여기에 구글 로그인 버튼이 나타납니다.
+            </span>
+          </div>
+          <button
+            type="button"
+            id="kakaoExternalBtn"
+            onclick="openExternalBrowser()"
+            style="display:none; width:100%; margin-top:8px; padding:9px; border-radius:10px; border:1px solid #3B7DDD; background:#fff; color:#3B7DDD; font-size:12.5px; font-weight:700; cursor:pointer;"
+          >
+            크롬 / 사파리 외부 브라우저로 열기
+          </button>
         </div>
-        <button
-          type="button"
-          id="kakaoExternalBtn"
-          onclick="openExternalBrowser()"
-          style="display:none; width:100%; margin-top:8px; padding:9px; border-radius:10px; border:1px solid #8C5A3C; background:#fff; color:#8C5A3C; font-size:12.5px; font-weight:700; cursor:pointer;"
-        >
-          크롬 / 사파리 외부 브라우저로 열기
-        </button>
+
+        <div class="pin-dots">
+          <div class="pin-dot" id="dot0"></div>
+          <div class="pin-dot" id="dot1"></div>
+          <div class="pin-dot" id="dot2"></div>
+          <div class="pin-dot" id="dot3"></div>
+        </div>
+
+        <div id="pinError" style="color: var(--danger); font-size: 13px; min-height: 20px; font-weight: 600;"></div>
+
+        <div class="keypad">
+          <button type="button" class="key-btn" onclick="pressPin('1')">1</button>
+          <button type="button" class="key-btn" onclick="pressPin('2')">2</button>
+          <button type="button" class="key-btn" onclick="pressPin('3')">3</button>
+          <button type="button" class="key-btn" onclick="pressPin('4')">4</button>
+          <button type="button" class="key-btn" onclick="pressPin('5')">5</button>
+          <button type="button" class="key-btn" onclick="pressPin('6')">6</button>
+          <button type="button" class="key-btn" onclick="pressPin('7')">7</button>
+          <button type="button" class="key-btn" onclick="pressPin('8')">8</button>
+          <button type="button" class="key-btn" onclick="pressPin('9')">9</button>
+          <button type="button" class="key-btn" style="font-size: 14px;" onclick="clearPin()">전체지움</button>
+          <button type="button" class="key-btn" onclick="pressPin('0')">0</button>
+          <button type="button" class="key-btn" style="display:flex; align-items:center; justify-content:center;" onclick="backspacePin()" aria-label="지우기">
+            <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/>
+              <line x1="18" y1="9" x2="12" y2="15"/>
+              <line x1="12" y1="9" x2="18" y2="15"/>
+            </svg>
+          </button>
+        </div>
+
+        <label style="display:flex; align-items:center; justify-content:center; gap:6px; margin-top:16px; font-size:13px; color:var(--text-sub); cursor:pointer;">
+          <input type="checkbox" id="rememberPinChk" checked /> 이 기기에서 로그인 유지하기
+        </label>
       </div>
-
-      <div class="pin-dots">
-        <div class="pin-dot" id="dot0"></div>
-        <div class="pin-dot" id="dot1"></div>
-        <div class="pin-dot" id="dot2"></div>
-        <div class="pin-dot" id="dot3"></div>
-      </div>
-
-      <div id="pinError" style="color: var(--danger); font-size: 13px; min-height: 20px; font-weight: 600;"></div>
-
-      <div class="keypad">
-        <button type="button" class="key-btn" onclick="pressPin('1')">1</button>
-        <button type="button" class="key-btn" onclick="pressPin('2')">2</button>
-        <button type="button" class="key-btn" onclick="pressPin('3')">3</button>
-        <button type="button" class="key-btn" onclick="pressPin('4')">4</button>
-        <button type="button" class="key-btn" onclick="pressPin('5')">5</button>
-        <button type="button" class="key-btn" onclick="pressPin('6')">6</button>
-        <button type="button" class="key-btn" onclick="pressPin('7')">7</button>
-        <button type="button" class="key-btn" onclick="pressPin('8')">8</button>
-        <button type="button" class="key-btn" onclick="pressPin('9')">9</button>
-        <button type="button" class="key-btn" style="font-size: 14px;" onclick="clearPin()">전체지움</button>
-        <button type="button" class="key-btn" onclick="pressPin('0')">0</button>
-        <button type="button" class="key-btn" style="display:flex; align-items:center; justify-content:center;" onclick="backspacePin()" aria-label="지우기">
-          <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/>
-            <line x1="18" y1="9" x2="12" y2="15"/>
-            <line x1="12" y1="9" x2="18" y2="15"/>
-          </svg>
-        </button>
-      </div>
-
-      <label style="display:flex; align-items:center; justify-content:center; gap:6px; margin-top:16px; font-size:13px; color:var(--text-sub); cursor:pointer;">
-        <input type="checkbox" id="rememberPinChk" checked /> 이 기기에서 로그인 유지하기
-      </label>
     </div>
   </div>
 
   <div class="container">
-    <!-- 상단 헤더 -->
+    <!-- 상단 헤더 (영일대향수공방 브랜드) -->
     <header class="header">
       <div class="header-title">
-        <h1 style="display:flex; align-items:center; gap:8px;">
+        <span class="header-logo-en">YEONGILDAE ATELIER</span>
+        <h1>
           <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 3h6v3H9z"/>
             <path d="M6 9h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z"/>
+            <circle cx="12" cy="15" r="2"/>
           </svg>
           영일대향수공방 사장님 비서
         </h1>
-        <p>말 한마디로 정리하는 「영일대향수공방 매출 장부」</p>
+        <p>포항 영일대 오션뷰 감성 조향 아틀리에 · 매출 장부</p>
       </div>
       <div class="header-actions">
-        <button type="button" class="icon-btn" onclick="openSettingsModal()">
+        <button type="button" class="icon-btn" onclick="openSettingsModal()" title="설정">
           <svg class="svg-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -851,6 +1132,23 @@
 
     <!-- TAB 1. 음성으로 말하기 -->
     <div class="tab-pane active" id="paneVoice">
+      <!-- 아틀리에 공식 오션뷰 비주얼 배너 -->
+      <div class="atelier-hero-card">
+        <img src="images/hero-ocean.jpg" alt="영일대 바다 풍경" class="atelier-hero-img" />
+        <div class="atelier-hero-overlay"></div>
+        <div class="atelier-hero-body">
+          <span class="atelier-hero-tag">POHANG OCEAN VIEW ATELIER</span>
+          <div class="atelier-hero-title">영일대 바다를 마주한 감성 조향 아틀리에</div>
+          <p class="atelier-hero-desc">수업이 끝나면 편하게 말씀하세요. AI가 매출 장부에 기록합니다.</p>
+          <div class="atelier-hero-chips">
+            <span>#통창오션뷰</span>
+            <span>#1:1맞춤조향</span>
+            <span>#원데이클래스</span>
+            <span>#당일즉시소장</span>
+          </div>
+        </div>
+      </div>
+
       <section class="card">
         <div class="card-header">
           <h2 class="card-title"><span class="step-badge">1단계</span> 수업 끝나고 편하게 말하기</h2>
@@ -914,6 +1212,14 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <button type="button" class="sample-chip" onclick="switchTab('voice')">← 다시 말하기</button>
           <button type="button" class="sample-chip" onclick="switchTab('dashboard')">매출 장부 보기 →</button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:11px; padding:10px 12px; background:var(--bg-alt); border:1px solid var(--border); border-radius:12px; margin-bottom:14px;">
+          <img src="images/gallery-blending.jpg" alt="조향 블렌딩" style="width:42px; height:42px; border-radius:8px; object-fit:cover; border:1px solid var(--secondary); flex-shrink:0;" />
+          <div style="font-size:12.5px; color:var(--text-sub); line-height:1.4;">
+            <strong style="color:var(--text-strong);">수업 내용 최종 점검</strong><br>
+            AI가 분류한 내용을 확인하신 뒤 저장 버튼을 눌러주세요.
+          </div>
         </div>
 
         <div class="card-header">
@@ -1071,6 +1377,15 @@
 
     <!-- TAB 3. 매출 합계 및 최근 내역 5건 -->
     <div class="tab-pane" id="paneDashboard">
+      <div class="dashboard-atelier-banner">
+        <img src="images/gallery-bottle.jpg" alt="시그니처 향수 보틀" class="dashboard-atelier-img" />
+        <div class="dashboard-atelier-info">
+          <span class="dashboard-atelier-tag">YEONGILDAE ATELIER RECORD</span>
+          <div class="dashboard-atelier-name">영일대향수공방 매출 장부</div>
+          <div class="dashboard-atelier-sub">구글 스프레드시트 「매출내역」 시트와 실시간 연동</div>
+        </div>
+      </div>
+
       <section class="card">
         <div class="card-header">
           <h2 class="card-title">매출 합계 & 최근 저장 내역 5건</h2>
