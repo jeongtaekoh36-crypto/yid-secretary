@@ -129,6 +129,82 @@
       white-space: nowrap;
     }
 
+    /* 상단 탭 네비게이션 */
+    .tab-nav {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      background: #EFE7DC;
+      padding: 6px;
+      border-radius: 18px;
+      margin-bottom: 16px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    .tab-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 10px 4px;
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .tab-btn .tab-icon {
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(140, 90, 60, 0.28);
+    }
+
+    .tab-btn:active {
+      transform: scale(0.96);
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+      animation: tabFadeIn 0.22s ease;
+    }
+
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .secondary-nav-btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 13px;
+      border: 1.5px dashed var(--primary);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
     /* 공통 카드 */
     .card {
       background: var(--card);
@@ -693,167 +769,205 @@
       <button type="button" onclick="openSettingsModal()">연결하기</button>
     </div>
 
-    <!-- STEP 1. 음성으로 말하기 -->
-    <section class="card">
-      <div class="card-header">
-        <h2 class="card-title"><span class="step-badge">1단계</span> 수업 끝나고 편하게 말하기</h2>
-        <span id="micSupportBadge" style="font-size:12px; color:var(--text-sub);">한국어 음성인식</span>
-      </div>
-
-      <div class="voice-box">
-        <button type="button" id="micBtn" class="mic-btn" onclick="toggleSpeechRecognition()">
-          <span id="micIcon">🎙️</span>
-          <span id="micBtnText">눌러서 말하기 (음성 입력)</span>
-        </button>
-
-        <textarea
-          id="rawSpeechInput"
-          class="speech-textarea"
-          placeholder="예: 오늘 원데이 클래스 2명 7만원 카드, 인스타 보고 옴"
-        ></textarea>
-
-        <div>
-          <div style="font-size:12px; color:var(--text-sub); margin-bottom:6px; font-weight:600;">💡 예시 문장 (눌러서 바로 테스트해 보세요)</div>
-          <div class="sample-chips">
-            <button type="button" class="sample-chip" onclick="fillSample('오늘 원데이 클래스 2명 7만원 카드, 인스타 보고 옴')">
-              "오늘 원데이 클래스 2명 7만원 카드, 인스타 보고 옴"
-            </button>
-            <button type="button" class="sample-chip" onclick="fillSample('오늘 커플 클래스 2명 9만원 계좌이체, 네이버 예약, 50ml 변경')">
-              "커플 2명 9만원 계좌이체 네이버예약 50ml 변경"
-            </button>
-            <button type="button" class="sample-chip" onclick="fillSample('완제품 판매 1명 4만5천원 포항사랑상품권, 지나가다 방문')">
-              "완제품 1명 4만5천원 포항사랑상품권 워크인"
-            </button>
-          </div>
-        </div>
-
-        <button type="button" id="analyzeBtn" class="primary-btn" onclick="analyzeSpeech()">
-          ✨ AI로 자동 정리하기
-        </button>
-      </div>
-    </section>
-
-    <!-- STEP 2. AI가 정리한 내용 확인 및 수정 후 시트 저장 -->
-    <section class="card" id="confirmSection">
-      <div class="card-header">
-        <h2 class="card-title"><span class="step-badge">2단계</span> 확인 후 장부에 한 줄 저장</h2>
-        <span id="aiModeBadge" class="ai-badge">대기 중</span>
-      </div>
-
-      <div id="aiNoticeBox" style="display:none; background:#FFF8E7; border:1px solid #F0D999; color:#7A5800; padding:10px 12px; border-radius:10px; font-size:12.5px; margin-bottom:14px;"></div>
-
-      <!-- 1. 날짜 -->
-      <div class="form-group">
-        <div class="form-label">
-          <span>📅 날짜</span>
-          <div style="display:flex; gap:5px;">
-            <button type="button" class="sample-chip" onclick="setRelativeDate(0)">오늘</button>
-            <button type="button" class="sample-chip" onclick="setRelativeDate(-1)">어제</button>
-            <button type="button" class="sample-chip" onclick="setRelativeDate(-2)">그저께</button>
-          </div>
-        </div>
-        <input type="date" id="fieldDate" class="form-input" />
-      </div>
-
-      <!-- 2. 구분 -->
-      <div class="form-group">
-        <div class="form-label"><span>🏷️ 구분</span></div>
-        <input type="text" id="fieldCategory" class="form-input" placeholder="예: 원데이 클래스" />
-        <div class="chip-group" id="categoryChips"></div>
-      </div>
-
-      <!-- 3. 인원 -->
-      <div class="form-group">
-        <div class="form-label">
-          <span>👥 인원 (명)</span>
-          <span id="peopleFormattedPreview" style="color:var(--primary-dark); font-weight:800;">2명</span>
-        </div>
-        <div class="inline-controls">
-          <button type="button" class="step-btn" onclick="adjustPeople(-1)">－</button>
-          <input type="number" id="fieldPeople" class="form-input" min="1" value="2" oninput="updatePeoplePreview()" style="text-align:center; font-weight:800; font-size:17px; flex:1; min-width:90px;" />
-          <button type="button" class="step-btn" onclick="adjustPeople(1)">＋</button>
-        </div>
-        <div class="chip-group">
-          <button type="button" class="sample-chip" onclick="setPeople(1)">1명</button>
-          <button type="button" class="sample-chip" onclick="setPeople(2)">2명</button>
-          <button type="button" class="sample-chip" onclick="setPeople(4)">4명</button>
-          <button type="button" class="sample-chip" onclick="setPeople(10)">10명</button>
-          <button type="button" class="sample-chip" onclick="setPeople(20)">20명</button>
-          <button type="button" class="sample-chip" onclick="adjustPeople(5)">+5명</button>
-          <button type="button" class="sample-chip" onclick="adjustPeople(10)">+10명</button>
-        </div>
-      </div>
-
-      <!-- 4. 금액 -->
-      <div class="form-group">
-        <div class="form-label">
-          <span>💰 금액 (원)</span>
-          <span id="amountFormattedPreview" style="color:var(--primary-dark); font-weight:800;">70,000원</span>
-        </div>
-        <input type="number" id="fieldAmount" class="form-input" step="1000" value="70000" oninput="updateAmountPreview()" style="font-weight:800; font-size:17px;" />
-        <div class="chip-group">
-          <button type="button" class="sample-chip" onclick="setAmount(35000)">35,000원</button>
-          <button type="button" class="sample-chip" onclick="setAmount(70000)">70,000원</button>
-          <button type="button" class="sample-chip" onclick="setAmount(105000)">105,000원</button>
-          <button type="button" class="sample-chip" onclick="adjustAmount(10000)">+1만</button>
-          <button type="button" class="sample-chip" onclick="adjustAmount(5000)">+5천</button>
-          <button type="button" class="sample-chip" onclick="adjustAmount(-10000)">-1만</button>
-        </div>
-      </div>
-
-      <!-- 5. 결제수단 -->
-      <div class="form-group">
-        <div class="form-label"><span>💳 결제수단</span></div>
-        <input type="text" id="fieldPayment" class="form-input" placeholder="예: 카드" />
-        <div class="chip-group" id="paymentChips"></div>
-      </div>
-
-      <!-- 6. 유입경로 -->
-      <div class="form-group">
-        <div class="form-label"><span>🚶 유입경로</span></div>
-        <input type="text" id="fieldChannel" class="form-input" placeholder="예: 인스타" />
-        <div class="chip-group" id="channelChips"></div>
-      </div>
-
-      <!-- 7. 비고(메모) -->
-      <div class="form-group">
-        <div class="form-label"><span>📝 비고 (선택 메모)</span></div>
-        <input type="text" id="fieldMemo" class="form-input" placeholder="예: 50ml 변경, 단골 손님, 선물 포장 등" />
-      </div>
-
-      <button type="button" id="saveBtn" class="primary-btn save-btn" onclick="saveRecordToSheet()">
-        📒 확인 완료! 구글 시트에 한 줄 저장하기
+    <!-- 📑 상단 탭 메뉴 (화면 전환으로 스크롤 최소화) -->
+    <nav class="tab-nav">
+      <button type="button" class="tab-btn active" id="tabBtnVoice" onclick="switchTab('voice')">
+        <span class="tab-icon">🎙️</span>
+        <span class="tab-label">1. 음성 입력</span>
       </button>
-    </section>
+      <button type="button" class="tab-btn" id="tabBtnConfirm" onclick="switchTab('confirm')">
+        <span class="tab-icon">📝</span>
+        <span class="tab-label">2. 확인·저장</span>
+      </button>
+      <button type="button" class="tab-btn" id="tabBtnDashboard" onclick="switchTab('dashboard')">
+        <span class="tab-icon">📊</span>
+        <span class="tab-label">3. 매출 장부</span>
+      </button>
+    </nav>
 
-    <!-- STEP 3. 매출 합계 및 최근 내역 5건 -->
-    <section class="card">
-      <div class="card-header">
-        <h2 class="card-title">📊 매출 합계 & 최근 저장 내역 5건</h2>
-        <button type="button" class="sample-chip" onclick="loadDashboard()" style="font-weight:700;">🔄 새로고침</button>
-      </div>
-
-      <div class="summary-grid">
-        <div class="summary-box">
-          <div class="label">오늘 매출 합계</div>
-          <div class="amount" id="todayTotalText">0원</div>
-          <div class="meta" id="todayMetaText">0건 · 0명</div>
+    <!-- TAB 1. 음성으로 말하기 -->
+    <div class="tab-pane active" id="paneVoice">
+      <section class="card">
+        <div class="card-header">
+          <h2 class="card-title"><span class="step-badge">1단계</span> 수업 끝나고 편하게 말하기</h2>
+          <span id="micSupportBadge" style="font-size:12px; color:var(--text-sub);">한국어 음성인식</span>
         </div>
-        <div class="summary-box">
-          <div class="label">이번 달 매출 합계</div>
-          <div class="amount" id="monthTotalText">0원</div>
-          <div class="meta" id="monthMetaText">0건 · 0명</div>
+
+        <div class="voice-box">
+          <button type="button" id="micBtn" class="mic-btn" onclick="toggleSpeechRecognition()">
+            <span id="micIcon">🎙️</span>
+            <span id="micBtnText">눌러서 말하기 (음성 입력)</span>
+          </button>
+
+          <textarea
+            id="rawSpeechInput"
+            class="speech-textarea"
+            placeholder="예: 오늘 원데이 클래스 2명 7만원 카드, 인스타 보고 옴"
+          ></textarea>
+
+          <div>
+            <div style="font-size:12px; color:var(--text-sub); margin-bottom:6px; font-weight:600;">💡 예시 문장 (눌러서 바로 테스트해 보세요)</div>
+            <div class="sample-chips">
+              <button type="button" class="sample-chip" onclick="fillSample('오늘 원데이 클래스 2명 7만원 카드, 인스타 보고 옴')">
+                "오늘 원데이 클래스 2명 7만원 카드, 인스타 보고 옴"
+              </button>
+              <button type="button" class="sample-chip" onclick="fillSample('오늘 커플 클래스 2명 9만원 계좌이체, 네이버 예약, 50ml 변경')">
+                "커플 2명 9만원 계좌이체 네이버예약 50ml 변경"
+              </button>
+              <button type="button" class="sample-chip" onclick="fillSample('완제품 판매 1명 4만5천원 포항사랑상품권, 지나가다 방문')">
+                "완제품 1명 4만5천원 포항사랑상품권 워크인"
+              </button>
+            </div>
+          </div>
+
+          <button type="button" id="analyzeBtn" class="primary-btn" onclick="analyzeSpeech()">
+            ✨ AI로 자동 정리하기
+          </button>
+
+          <button type="button" class="secondary-nav-btn" onclick="switchTab('confirm')">
+            📝 정리된 내역 직접 확인/수정하러 가기 →
+          </button>
+          <button type="button" class="secondary-nav-btn" style="border-style:solid; background:transparent; margin-top:0;" onclick="switchTab('dashboard')">
+            📊 오늘 매출 및 최근 장부 확인하기 →
+          </button>
         </div>
-      </div>
+      </section>
+    </div>
 
-      <div style="font-size:13.5px; font-weight:800; color:var(--text-sub); margin-bottom:10px;">
-        최근 입력한 5건
-      </div>
+    <!-- TAB 2. AI가 정리한 내용 확인 및 수정 후 시트 저장 -->
+    <div class="tab-pane" id="paneConfirm">
+      <section class="card" id="confirmSection">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <button type="button" class="sample-chip" onclick="switchTab('voice')">← 🎙️ 다시 말하기</button>
+          <button type="button" class="sample-chip" onclick="switchTab('dashboard')">📊 매출 장부 보기 →</button>
+        </div>
 
-      <div id="recentListContainer" class="recent-list">
-        <div class="empty-state">구글 시트 연결 후 내역이 여기에 표시됩니다.</div>
-      </div>
-    </section>
+        <div class="card-header">
+          <h2 class="card-title"><span class="step-badge">2단계</span> 확인 후 장부에 한 줄 저장</h2>
+          <span id="aiModeBadge" class="ai-badge">대기 중</span>
+        </div>
+
+        <div id="aiNoticeBox" style="display:none; background:#FFF8E7; border:1px solid #F0D999; color:#7A5800; padding:10px 12px; border-radius:10px; font-size:12.5px; margin-bottom:14px;"></div>
+
+        <!-- 1. 날짜 -->
+        <div class="form-group">
+          <div class="form-label">
+            <span>📅 날짜</span>
+            <div style="display:flex; gap:5px;">
+              <button type="button" class="sample-chip" onclick="setRelativeDate(0)">오늘</button>
+              <button type="button" class="sample-chip" onclick="setRelativeDate(-1)">어제</button>
+              <button type="button" class="sample-chip" onclick="setRelativeDate(-2)">그저께</button>
+            </div>
+          </div>
+          <input type="date" id="fieldDate" class="form-input" />
+        </div>
+
+        <!-- 2. 구분 -->
+        <div class="form-group">
+          <div class="form-label"><span>🏷️ 구분</span></div>
+          <input type="text" id="fieldCategory" class="form-input" placeholder="예: 원데이 클래스" />
+          <div class="chip-group" id="categoryChips"></div>
+        </div>
+
+        <!-- 3. 인원 -->
+        <div class="form-group">
+          <div class="form-label">
+            <span>👥 인원 (명)</span>
+            <span id="peopleFormattedPreview" style="color:var(--primary-dark); font-weight:800;">2명</span>
+          </div>
+          <div class="inline-controls">
+            <button type="button" class="step-btn" onclick="adjustPeople(-1)">－</button>
+            <input type="number" id="fieldPeople" class="form-input" min="1" value="2" oninput="updatePeoplePreview()" style="text-align:center; font-weight:800; font-size:17px; flex:1; min-width:90px;" />
+            <button type="button" class="step-btn" onclick="adjustPeople(1)">＋</button>
+          </div>
+          <div class="chip-group">
+            <button type="button" class="sample-chip" onclick="setPeople(1)">1명</button>
+            <button type="button" class="sample-chip" onclick="setPeople(2)">2명</button>
+            <button type="button" class="sample-chip" onclick="setPeople(4)">4명</button>
+            <button type="button" class="sample-chip" onclick="setPeople(10)">10명</button>
+            <button type="button" class="sample-chip" onclick="setPeople(20)">20명</button>
+            <button type="button" class="sample-chip" onclick="adjustPeople(5)">+5명</button>
+            <button type="button" class="sample-chip" onclick="adjustPeople(10)">+10명</button>
+          </div>
+        </div>
+
+        <!-- 4. 금액 -->
+        <div class="form-group">
+          <div class="form-label">
+            <span>💰 금액 (원)</span>
+            <span id="amountFormattedPreview" style="color:var(--primary-dark); font-weight:800;">70,000원</span>
+          </div>
+          <input type="number" id="fieldAmount" class="form-input" step="1000" value="70000" oninput="updateAmountPreview()" style="font-weight:800; font-size:17px;" />
+          <div class="chip-group">
+            <button type="button" class="sample-chip" onclick="setAmount(35000)">35,000원</button>
+            <button type="button" class="sample-chip" onclick="setAmount(70000)">70,000원</button>
+            <button type="button" class="sample-chip" onclick="setAmount(105000)">105,000원</button>
+            <button type="button" class="sample-chip" onclick="adjustAmount(10000)">+1만</button>
+            <button type="button" class="sample-chip" onclick="adjustAmount(5000)">+5천</button>
+            <button type="button" class="sample-chip" onclick="adjustAmount(-10000)">-1만</button>
+          </div>
+        </div>
+
+        <!-- 5. 결제수단 -->
+        <div class="form-group">
+          <div class="form-label"><span>💳 결제수단</span></div>
+          <input type="text" id="fieldPayment" class="form-input" placeholder="예: 카드" />
+          <div class="chip-group" id="paymentChips"></div>
+        </div>
+
+        <!-- 6. 유입경로 -->
+        <div class="form-group">
+          <div class="form-label"><span>🚶 유입경로</span></div>
+          <input type="text" id="fieldChannel" class="form-input" placeholder="예: 인스타" />
+          <div class="chip-group" id="channelChips"></div>
+        </div>
+
+        <!-- 7. 비고(메모) -->
+        <div class="form-group">
+          <div class="form-label"><span>📝 비고 (선택 메모)</span></div>
+          <input type="text" id="fieldMemo" class="form-input" placeholder="예: 50ml 변경, 단골 손님, 선물 포장 등" />
+        </div>
+
+        <button type="button" id="saveBtn" class="primary-btn save-btn" onclick="saveRecordToSheet()">
+          📒 확인 완료! 구글 시트에 한 줄 저장하기
+        </button>
+      </section>
+    </div>
+
+    <!-- TAB 3. 매출 합계 및 최근 내역 5건 -->
+    <div class="tab-pane" id="paneDashboard">
+      <section class="card">
+        <div class="card-header">
+          <h2 class="card-title">📊 매출 합계 & 최근 저장 내역 5건</h2>
+          <button type="button" class="sample-chip" onclick="loadDashboard()" style="font-weight:700;">🔄 새로고침</button>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-box">
+            <div class="label">오늘 매출 합계</div>
+            <div class="amount" id="todayTotalText">0원</div>
+            <div class="meta" id="todayMetaText">0건 · 0명</div>
+          </div>
+          <div class="summary-box">
+            <div class="label">이번 달 매출 합계</div>
+            <div class="amount" id="monthTotalText">0원</div>
+            <div class="meta" id="monthMetaText">0건 · 0명</div>
+          </div>
+        </div>
+
+        <div style="font-size:13.5px; font-weight:800; color:var(--text-sub); margin-bottom:10px;">
+          최근 입력한 5건
+        </div>
+
+        <div id="recentListContainer" class="recent-list">
+          <div class="empty-state">구글 시트 연결 후 내역이 여기에 표시됩니다.</div>
+        </div>
+
+        <button type="button" class="primary-btn" style="margin-top:16px;" onclick="switchTab('voice')">
+          🎙️ 새 수업 매출 등록하기
+        </button>
+      </section>
+    </div>
   </div>
 
   <!-- ⚙️ 연결 설정 모달 -->
@@ -1199,6 +1313,34 @@
     }
 
     /**
+     * 📑 탭 전환 (화면 스크롤 없이 탭으로 깔끔하게 이동)
+     */
+    function switchTab(tabId) {
+      const tabs = [
+        { id: "voice", btn: "tabBtnVoice", pane: "paneVoice" },
+        { id: "confirm", btn: "tabBtnConfirm", pane: "paneConfirm" },
+        { id: "dashboard", btn: "tabBtnDashboard", pane: "paneDashboard" }
+      ];
+
+      tabs.forEach((t) => {
+        const btnEl = document.getElementById(t.btn);
+        const paneEl = document.getElementById(t.pane);
+        if (t.id === tabId) {
+          if (btnEl) btnEl.classList.add("active");
+          if (paneEl) paneEl.classList.add("active");
+        } else {
+          if (btnEl) btnEl.classList.remove("active");
+          if (paneEl) paneEl.classList.remove("active");
+        }
+      });
+
+      if (tabId === "dashboard") {
+        loadDashboard();
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /**
      * 🏷️ 선택 칩 버튼 렌더링 및 동기화
      */
     function initChoiceChips() {
@@ -1391,11 +1533,12 @@
       const noticeBox = document.getElementById("aiNoticeBox");
       noticeBox.style.display = "none";
 
-      // 1단계: 0.1초 만에 즉시 화면에 먼저 채워넣어 기다림 없이 바로 확인 가능하게 처리
+      // 1단계: 0.1초 만에 즉시 화면에 먼저 채워넣고 2단계(확인·저장) 탭으로 자동 이동!
       const instantParsed = parseLocalPreview(text);
       applyParsedDataToForm(instantParsed);
       badge.textContent = "✨ AI 자동 정리 완료";
       badge.className = "ai-badge gemini";
+      switchTab("confirm");
       showToast("✨ 정리가 완료되었습니다! 내용을 확인한 뒤 저장을 눌러주세요.");
 
       const gasUrl = getGasUrl();
@@ -1494,6 +1637,9 @@
         }
 
         showToast("🎉 「영일대향수공방 매출 장부」에 한 줄 저장되었습니다!");
+        setTimeout(() => {
+          switchTab("dashboard");
+        }, 650);
       } catch (err) {
         alert("저장에 실패했습니다: " + err.message + "\n\n⚙️설정에서 웹 앱 URL이 정확한지 확인해 주세요.");
       } finally {
