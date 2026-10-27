@@ -743,14 +743,23 @@
 
       <!-- 3. 인원 -->
       <div class="form-group">
-        <div class="form-label"><span>👥 인원 (명)</span></div>
+        <div class="form-label">
+          <span>👥 인원 (명)</span>
+          <span id="peopleFormattedPreview" style="color:var(--primary-dark); font-weight:800;">2명</span>
+        </div>
         <div class="inline-controls">
           <button type="button" class="step-btn" onclick="adjustPeople(-1)">－</button>
-          <input type="number" id="fieldPeople" class="form-input" min="1" value="2" style="text-align:center; font-weight:800;" />
+          <input type="number" id="fieldPeople" class="form-input" min="1" value="2" oninput="updatePeoplePreview()" style="text-align:center; font-weight:800; font-size:17px; flex:1; min-width:90px;" />
           <button type="button" class="step-btn" onclick="adjustPeople(1)">＋</button>
-          <button type="button" class="step-btn" onclick="setPeople(1)" style="font-size:13px;">1명</button>
-          <button type="button" class="step-btn" onclick="setPeople(2)" style="font-size:13px;">2명</button>
-          <button type="button" class="step-btn" onclick="setPeople(4)" style="font-size:13px;">4명</button>
+        </div>
+        <div class="chip-group">
+          <button type="button" class="sample-chip" onclick="setPeople(1)">1명</button>
+          <button type="button" class="sample-chip" onclick="setPeople(2)">2명</button>
+          <button type="button" class="sample-chip" onclick="setPeople(4)">4명</button>
+          <button type="button" class="sample-chip" onclick="setPeople(10)">10명</button>
+          <button type="button" class="sample-chip" onclick="setPeople(20)">20명</button>
+          <button type="button" class="sample-chip" onclick="adjustPeople(5)">+5명</button>
+          <button type="button" class="sample-chip" onclick="adjustPeople(10)">+10명</button>
         </div>
       </div>
 
@@ -899,6 +908,7 @@
       initPinLock();
       initChoiceChips();
       setRelativeDate(0);
+      updatePeoplePreview();
       updateAmountPreview();
       initSpeechRecognition();
       updateConnectionBanner();
@@ -1075,10 +1085,20 @@
       const el = document.getElementById("fieldPeople");
       const cur = parseInt(el.value, 10) || 1;
       el.value = Math.max(1, cur + delta);
+      updatePeoplePreview();
     }
 
     function setPeople(val) {
       document.getElementById("fieldPeople").value = val;
+      updatePeoplePreview();
+    }
+
+    function updatePeoplePreview() {
+      const val = parseInt(document.getElementById("fieldPeople").value, 10) || 1;
+      const previewEl = document.getElementById("peopleFormattedPreview");
+      if (previewEl) {
+        previewEl.textContent = val.toLocaleString("ko-KR") + "명";
+      }
     }
 
     function setAmount(val) {
@@ -1264,6 +1284,7 @@
       syncChipHighlight("categoryChips", document.getElementById("fieldCategory").value);
       syncChipHighlight("paymentChips", document.getElementById("fieldPayment").value);
       syncChipHighlight("channelChips", document.getElementById("fieldChannel").value);
+      updatePeoplePreview();
       updateAmountPreview();
     }
 
