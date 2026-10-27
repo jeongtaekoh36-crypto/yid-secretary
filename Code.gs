@@ -263,7 +263,9 @@ function getGoogleClientId() {
   const scriptProps = PropertiesService.getScriptProperties();
   const directId = scriptProps.getProperty('GOOGLE_CLIENT_ID') ||
                    scriptProps.getProperty('CLIENT_ID') ||
-                   scriptProps.getProperty('OAUTH_CLIENT_ID');
+                   scriptProps.getProperty('OAUTH_CLIENT_ID') ||
+                   scriptProps.getProperty('yid-client') ||
+                   scriptProps.getProperty('YID_CLIENT');
   if (directId && directId.trim() !== '') {
     return directId.trim();
   }
