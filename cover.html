@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>영일대향수공방 사장님 비서 | 프로젝트 표지 & PC·모바일 쇼케이스</title>
+
+  <!-- 파비콘 -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233B7DDD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3h6v3H9z'/%3E%3Cpath d='M6 9h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z'/%3E%3Ccircle cx='12' cy='15' r='2'/%3E%3C/svg%3E" />
+
+  <!-- 웹 폰트: Pretendard & 고운 바탕(Gowun Batang) -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       영일대향수공방 사장님 비서 공식 표지 화면 스타일시트
+       - 브랜드 테마: Ocean Blue (#3B7DDD), Cozy Wood (#D4B895, #B69368), Slate Navy (#1C2B3C)
+       ========================================================================== */
+    :root {
+      --primary: #3B7DDD;
+      --primary-light: #5D9CEC;
+      --primary-soft: #EBF3FD;
+      --secondary: #D4B895;
+      --secondary-dark: #B69368;
+      --secondary-soft: #F7F1E8;
+      --bg: #FAF8F5;
+      --bg-card: #FFFFFF;
+      --navy: #1C2B3C;
+      --navy-dark: #121D29;
+      --text-strong: #1E293B;
+      --text: #4A4A4A;
+      --text-muted: #7A7670;
+      --border: #EAE3D8;
+      --border-dark: #D4C9BA;
+
+      --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+      --font-serif: "Gowun Batang", Georgia, serif;
+
+      --shadow-sm: 0 4px 16px rgba(28, 43, 60, 0.05);
+      --shadow-md: 0 12px 32px rgba(28, 43, 60, 0.08);
+      --shadow-lg: 0 24px 54px rgba(28, 43, 60, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       1. 최상단 네비게이션 헤더
+       ========================================================================== */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 253, 249, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      transition: all 0.25s ease;
+    }
+
+    .top-nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-logo__en {
+      font-family: var(--font-serif);
+      font-size: 10.5px;
+      letter-spacing: 2px;
+      color: var(--secondary-dark);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .brand-logo__title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-strong);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      padding: 9px 16px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn--outline {
+      border: 1.5px solid var(--border-dark);
+      background: #FFFFFF;
+      color: var(--text-strong);
+    }
+
+    .nav-btn--outline:hover {
+      background: var(--secondary-soft);
+      border-color: var(--secondary-dark);
+    }
+
+    .nav-btn--primary {
+      background: linear-gradient(135deg, #3B7DDD 0%, #5D9CEC 100%);
+      color: #FFFFFF;
+      border: none;
+      box-shadow: 0 4px 14px rgba(59, 125, 221, 0.28);
+    }
+
+    .nav-btn--primary:hover {
+      background: linear-gradient(135deg, #2D6FCF 0%, #4D8BE0 100%);
+      box-shadow: 0 6px 18px rgba(59, 125, 221, 0.38);
+    }
+
+    /* ==========================================================================
+       2. 프로젝트 표지 메인 히어로 섹션
+       ========================================================================== */
+    .hero-cover {
+      position: relative;
+      padding: 54px 0 40px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #FFFFFF 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-cover__bg {
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(93, 156, 236, 0.12) 0%, rgba(212, 184, 149, 0.08) 60%, transparent 80%);
+      filter: blur(40px);
+      pointer-events: none;
+    }
+
+    .hero-badge-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 13px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .hero-badge--blue {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1px solid rgba(93, 156, 236, 0.3);
+    }
+
+    .hero-badge--wood {
+      background: var(--secondary-soft);
+      color: var(--secondary-dark);
+      border: 1px solid rgba(182, 147, 104, 0.35);
+      font-family: var(--font-serif);
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--text-strong);
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #1C2B3C 0%, #3B7DDD 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-slogan {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--secondary-dark);
+      margin-bottom: 16px;
+      font-family: var(--font-serif);
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: var(--text);
+      max-width: 820px;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 900px;
+      margin-bottom: 34px;
+    }
+
+    .stat-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-card__num {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary);
+      font-family: var(--font-sans);
+      line-height: 1.2;
+    }
+
+    .stat-card__label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-top: 4px;
+    }
+
+    .stat-card__sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       3. 버전 구분 스위처 바 (PC vs 휴대폰 vs 듀얼 뷰)
+       ========================================================================== */
+    .view-control-bar {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-sm);
+      flex-wrap: wrap;
+    }
+
+    .view-switcher {
+      display: flex;
+      background: #F1ECE3;
+      padding: 4px;
+      border-radius: 14px;
+      gap: 4px;
+    }
+
+    .view-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: none;
+      background: transparent;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .view-tab-btn.active {
+      background: #FFFFFF;
+      color: var(--primary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .view-tab-btn:hover:not(.active) {
+      color: var(--text-strong);
+    }
+
+    .view-info-text {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .view-info-text strong {
+      color: var(--text-strong);
+    }
+
+    /* ==========================================================================
+       4. 기기별 목업 디스플레이 (Device Mockups)
+       ========================================================================== */
+    .showcase-stage {
+      margin-bottom: 60px;
+    }
+
+    .view-pane {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .view-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- PC 데스크톱 목업 프레임 --- */
+    .desktop-frame-container {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .mac-window {
+      background: #FFFFFF;
+      border: 1px solid var(--border-dark);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .mac-header {
+      background: #F3EEE5;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mac-dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .mac-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .mac-dot--red { background: #FF5F56; }
+    .mac-dot--yellow { background: #FFBD2E; }
+    .mac-dot--green { background: #27C93F; }
+
+    .mac-address-bar {
+      flex: 1;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .mac-iframe-box {
+      width: 100%;
+      height: 640px;
+      background: #FFFDF9;
+      position: relative;
+    }
+
+    .mac-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* --- 휴대폰 스마트폰 목업 프레임 --- */
+    .mobile-frame-container {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 36px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .phone-mockup-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone-mockup {
+      width: 375px;
+      height: 740px;
+      background: #1C2B3C;
+      border-radius: 48px;
+      padding: 12px;
+      box-shadow: 0 25px 60px rgba(28, 43, 60, 0.28), 0 0 0 3px #D4C5B0;
+      position: relative;
+    }
+
+    .phone-speaker {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 24px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .phone-lens {
+      width: 10px;
+      height: 10px;
+      background: #162433;
+      border-radius: 50%;
+      margin-left: 60px;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #FFFDF9;
+      border-radius: 38px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .phone-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* --- 듀얼 뷰 (나란히 비교) --- */
+    .dual-frame-container {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    /* 목업 옆 설명 카드 */
+    .mockup-desc-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mockup-desc-card__header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .mockup-desc-card__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .mockup-desc-card__icon--pc {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .mockup-desc-card__icon--mobile {
+      background: var(--secondary-soft);
+      color: var(--secondary-dark);
+    }
+
+    .mockup-desc-card__title {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-strong);
+    }
+
+    .mockup-desc-card__sub {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .feature-item__bullet {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--secondary-soft);
+      color: var(--secondary-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .mockup-actions {
+      margin-top: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* ==========================================================================
+       5. 프로젝트 가치 비교 (Before vs After)
+       ========================================================================== */
+    .section-wrap {
+      padding: 50px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 36px;
+    }
+
+    .section-tag {
+      font-family: var(--font-serif);
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--secondary-dark);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: 10px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .compare-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .compare-card--before {
+      border-top: 5px solid #E28C8C;
+    }
+
+    .compare-card--after {
+      border-top: 5px solid var(--primary);
+      background: linear-gradient(180deg, #FFFFFF 0%, #F5F9FE 100%);
+    }
+
+    .compare-card__badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .compare-card--before .compare-card__badge {
+      background: #FDE8E8;
+      color: #C53030;
+    }
+
+    .compare-card--after .compare-card__badge {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .compare-card__title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-strong);
+      margin-bottom: 14px;
+    }
+
+    .compare-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .compare-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    /* ==========================================================================
+       6. 4단계 자동화 파이프라인 (Architecture Flow)
+       ========================================================================== */
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      position: relative;
+    }
+
+    .flow-step-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .flow-step-num {
+      font-family: var(--font-serif);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--secondary-dark);
+      letter-spacing: 1px;
+    }
+
+    .flow-step-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-strong);
+    }
+
+    .flow-step-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .flow-step-tech {
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       7. 갤러리 비주얼 & 브랜드 무드
+       ========================================================================== */
+    .gallery-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .gallery-strip-item {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      height: 160px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .gallery-strip-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-strip-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-strip-caption {
+      position: absolute;
+      bottom: 0;
+      inset-inline: 0;
+      padding: 6px 10px;
+      background: linear-gradient(180deg, transparent 0%, rgba(20, 32, 46, 0.85) 100%);
+      color: #FFFFFF;
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       8. 하단 액션 콜아웃 푸터
+       ========================================================================== */
+    .footer-cta {
+      background: linear-gradient(135deg, #1C2B3C 0%, #25415E 60%, #3B7DDD 100%);
+      color: #FFFFFF;
+      border-radius: 28px;
+      padding: 44px 36px;
+      margin: 40px 0 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      box-shadow: var(--shadow-lg);
+      flex-wrap: wrap;
+    }
+
+    .footer-cta__text h2 {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .footer-cta__text p {
+      font-size: 15px;
+      opacity: 0.9;
+      max-width: 580px;
+      line-height: 1.6;
+    }
+
+    .footer-cta__actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom-info {
+      text-align: center;
+      padding: 20px 0 40px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ==========================================================================
+       9. 반응형 미디어 쿼리 (모바일/태블릿)
+       ========================================================================== */
+    @media (max-width: 992px) {
+      .hero-title {
+        font-size: 32px;
+      }
+      .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .desktop-frame-container {
+        grid-template-columns: 1fr;
+      }
+      .mobile-frame-container {
+        grid-template-columns: 1fr;
+      }
+      .dual-frame-container {
+        grid-template-columns: 1fr;
+      }
+      .flow-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+      .gallery-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero-title {
+        font-size: 26px;
+      }
+      .hero-slogan {
+        font-size: 16px;
+      }
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+      .phone-mockup {
+        width: 100%;
+        max-width: 340px;
+        height: 640px;
+      }
+      .flow-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-cta {
+        padding: 30px 20px;
+      }
+    }
+
+    /* 인쇄 최적화 (PDF 저장용) */
+    @media print {
+      .top-nav, .view-control-bar, .nav-actions, .mockup-actions, .footer-cta__actions {
+        display: none !important;
+      }
+      body {
+        background: #FFFFFF;
+      }
+      .mac-window, .phone-mockup, .stat-card, .compare-card {
+        box-shadow: none !important;
+        border: 1px solid #CCCCCC !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 상단 네비게이션 헤더 -->
+  <header class="top-nav">
+    <div class="container top-nav__inner">
+      <a href="index.html" class="brand-logo" title="사장님 비서 앱 바로가기">
+        <span class="brand-logo__en">YEONGILDAE ATELIER</span>
+        <h1 class="brand-logo__title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);">
+            <path d="M9 3h6v3H9z"/>
+            <path d="M6 9h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2z"/>
+            <circle cx="12" cy="15" r="2"/>
+          </svg>
+          영일대향수공방 사장님 비서
+        </h1>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="nav-btn nav-btn--primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          앱 실행하기
+        </a>
+        <button type="button" class="nav-btn nav-btn--outline" onclick="window.print()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          PDF / 인쇄
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. 프로젝트 표지 메인 히어로 섹션 -->
+  <section class="hero-cover">
+    <div class="hero-cover__bg"></div>
+    <div class="container">
+      <div class="hero-badge-wrap">
+        <span class="hero-badge hero-badge--blue">AI VIBE CODING PROJECT</span>
+        <span class="hero-badge hero-badge--wood">포항 영일대 오션뷰 조향 아틀리에 전용</span>
+        <span class="hero-badge hero-badge--blue">구글 스프레드시트 실시간 연동</span>
+      </div>
+
+      <h2 class="hero-title">
+        영일대향수공방 사장님 비서<br />
+        <span>말 한마디로 0.1초 만에 장부 입력 끝!</span>
+      </h2>
+
+      <div class="hero-slogan">
+        수업 직후 편하게 말씀하세요. AI가 7가지 항목을 분류해 구글 시트에 자동 기록합니다.
+      </div>
+
+      <p class="hero-desc">
+        포항 영일대 해수욕장 앞 오션뷰 조향 아틀리에 <b>「영일대향수공방」</b>의 실제 원데이·커플 클래스 현장을 위해 개발된 1인 맞춤형 AI 업무 자동화 솔루션입니다.
+        수업 직후 스마트폰이나 카운터 PC에서 5초만 말씀하시면, <b>Gemini AI</b>가 날짜·구분·인원·금액·결제수단·유입경로·비고를 즉시 구조화하여 사장님의 구글 시트 매출 장부에 1초 만에 안전하게 저장합니다.
+      </p>
+
+      <!-- 핵심 성능 지표 -->
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-card__num">0.1초</div>
+          <div class="stat-card__label">초고속 즉시 파싱</div>
+          <div class="stat-card__sub">자연어 문장 0.1초 화면 반영</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__num">100%</div>
+          <div class="stat-card__label">한국어 음성 인식</div>
+          <div class="stat-card__sub">Web Speech API 네이티브 연동</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__num">1초</div>
+          <div class="stat-card__label">구글 시트 실시간 저장</div>
+          <div class="stat-card__sub">Apps Script 양방향 클라우드</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__num">2중</div>
+          <div class="stat-card__label">보안 인증 시스템</div>
+          <div class="stat-card__sub">Google OAuth 2.0 + PIN 0306</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 버전 구분 스위처 & 인터랙티브 기기 목업 (PC버전 vs 휴대폰 버전) -->
+  <main class="container" style="padding-top: 36px;">
+    <div class="view-control-bar">
+      <div class="view-switcher" role="tablist">
+        <button type="button" class="view-tab-btn active" id="tabBtnMobile" onclick="switchMockupView('mobile')" role="tab" aria-selected="true">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+            <line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+          휴대폰 버전 (Mobile)
+        </button>
+        <button type="button" class="view-tab-btn" id="tabBtnPc" onclick="switchMockupView('pc')" role="tab" aria-selected="false">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          PC 데스크톱 버전 (PC)
+        </button>
+        <button type="button" class="view-tab-btn" id="tabBtnDual" onclick="switchMockupView('dual')" role="tab" aria-selected="false">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+            <polyline points="2 17 12 22 22 17"/>
+            <polyline points="2 12 12 17 22 12"/>
+          </svg>
+          듀얼 뷰 (Dual)
+        </button>
+      </div>
+
+      <div class="view-info-text">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <span>목업 화면 안을 직접 <strong>클릭하거나 터치</strong>하여 실제 앱처럼 동작을 테스트해보실 수 있습니다.</span>
+      </div>
+    </div>
+
+    <!-- 기기별 쇼케이스 영역 -->
+    <div class="showcase-stage">
+      <!-- A. 휴대폰 버전 (Mobile View) -->
+      <div id="paneMobileView" class="view-pane active">
+        <div class="mobile-frame-container">
+          <div class="phone-mockup-wrapper">
+            <div class="phone-mockup">
+              <div class="phone-speaker">
+                <div class="phone-lens"></div>
+              </div>
+              <div class="phone-screen">
+                <iframe src="index.html?view=mobile" class="phone-iframe" title="영일대향수공방 사장님 비서 모바일 화면"></iframe>
+              </div>
+            </div>
+          </div>
+
+          <div class="mockup-desc-card">
+            <div class="mockup-desc-card__header">
+              <div class="mockup-desc-card__icon mockup-desc-card__icon--mobile">📱</div>
+              <div>
+                <h3 class="mockup-desc-card__title">휴대폰 모바일 최적화 버전</h3>
+                <span class="mockup-desc-card__sub">한 손 조작 & 원터치 음성 입력에 최적화된 모바일 화면</span>
+              </div>
+            </div>
+
+            <p style="font-size:14px; color:var(--text); line-height:1.6;">
+              수업을 마친 직후, 손을 씻고 공방 안을 오가며 스마트폰으로 즉시 기록할 수 있도록 설계되었습니다. 스크롤을 길게 내릴 필요 없이 <b>3단 탭 네비게이션</b>으로 쾌적하게 이동합니다.
+            </p>
+
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-item__bullet">1</span>
+                <div>
+                  <strong>원터치 마이크 음성 입력</strong><br />
+                  화면의 큰 마이크 버튼을 누르면 실시간으로 음성을 텍스트로 전환합니다.
+                </div>
+              </li>
+              <li class="feature-item">
+                <span class="feature-item__bullet">2</span>
+                <div>
+                  <strong>모바일 전용 퀵 칩 (+5천, +1만, 10명 등)</strong><br />
+                  타이핑 대신 엄지손가락으로 인원과 금액을 빠르게 증감할 수 있습니다.
+                </div>
+              </li>
+              <li class="feature-item">
+                <span class="feature-item__bullet">3</span>
+                <div>
+                  <strong>간편 4자리 PIN (0306) & 구글 원클릭 로그인</strong><br />
+                  사장님 본인 기기에서는 자동 로그인을 유지하여 번거로움을 없앴습니다.
+                </div>
+              </li>
+              <li class="feature-item">
+                <span class="feature-item__bullet">4</span>
+                <div>
+                  <strong>카카오톡 인앱 브라우저 외부 열기 지원</strong><br />
+                  '나와의 채팅'에 링크를 보내고 터치하면 크롬/사파리로 매끄럽게 연결됩니다.
+                </div>
+              </li>
+            </ul>
+
+            <div class="mockup-actions">
+              <a href="index.html?view=mobile" target="_blank" rel="noopener" class="nav-btn nav-btn--primary" style="justify-content:center;">
+                새 창에서 모바일 버전 크게 열기 →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B. PC 데스크톱 버전 (Desktop View) -->
+      <div id="panePcView" class="view-pane">
+        <div class="desktop-frame-container">
+          <div class="mac-window">
+            <div class="mac-header">
+              <div class="mac-dots">
+                <div class="mac-dot mac-dot--red"></div>
+                <div class="mac-dot mac-dot--yellow"></div>
+                <div class="mac-dot mac-dot--green"></div>
+              </div>
+              <div class="mac-address-bar">
+                <span>🔒 https://yid-secretary.vercel.app?view=pc</span>
+                <span style="font-size:11px; color:#2E7D32; font-weight:700;">● 연결됨</span>
+              </div>
+            </div>
+            <div class="mac-iframe-box">
+              <iframe src="index.html?view=pc" class="mac-iframe" title="영일대향수공방 사장님 비서 PC 데스크톱 화면"></iframe>
+            </div>
+          </div>
+
+          <div class="mockup-desc-card">
+            <div class="mockup-desc-card__header">
+              <div class="mockup-desc-card__icon mockup-desc-card__icon--pc">💻</div>
+              <div>
+                <h3 class="mockup-desc-card__title">PC 데스크톱 와이드 버전</h3>
+                <span class="mockup-desc-card__sub">공방 카운터 모니터 및 관리용 2열 대시보드</span>
+              </div>
+            </div>
+
+            <p style="font-size:14px; color:var(--text); line-height:1.6;">
+              공방 카운터의 노트북이나 태블릿, 데스크톱 PC에서 사용할 때 넓은 화면을 100% 활용할 수 있도록 <b>2열 대시보드 레이아웃</b>을 제공합니다.
+            </p>
+
+            <ul class="feature-list">
+              <li class="feature-item">
+                <span class="feature-item__bullet">1</span>
+                <div>
+                  <strong>2열 와이드 대시보드 레이아웃</strong><br />
+                  좌측에서 음성/키보드로 입력하면서, 우측에서 실시간 장부 합계를 동시에 확인합니다.
+                </div>
+              </li>
+              <li class="feature-item">
+                <span class="feature-item__bullet">2</span>
+                <div>
+                  <strong>오늘 & 이번 달 매출 실시간 모니터링</strong><br />
+                  구글 스프레드시트와 실시간 연동되어 오늘 매출액과 수강 인원이 즉시 집계됩니다.
+                </div>
+              </li>
+              <li class="feature-item">
+                <span class="feature-item__bullet">3</span>
+                <div>
+                  <strong>최근 5건 장부 내역 즉시 수정/삭제</strong><br />
+                  잘못 입력된 내역을 시트에 직접 들어가지 않고도 클릭 한 번으로 안전하게 삭제합니다.
+                </div>
+              </li>
+              <li class="feature-item">
+                <span class="feature-item__bullet">4</span>
+                <div>
+                  <strong>구글 Apps Script & Gemini API 설정 패널</strong><br />
+                  웹 앱 URL과 API 키를 시트 서버에 안전하게 영구 저장할 수 있는 관리자 창을 지원합니다.
+                </div>
+              </li>
+            </ul>
+
+            <div class="mockup-actions">
+              <a href="index.html?view=pc" target="_blank" rel="noopener" class="nav-btn nav-btn--primary" style="justify-content:center;">
+                새 창에서 PC 버전 전체화면 열기 →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C. 듀얼 뷰 (Dual Comparison View) -->
+      <div id="paneDualView" class="view-pane">
+        <div class="dual-frame-container">
+          <!-- 좌측 PC 모니터 -->
+          <div class="mac-window">
+            <div class="mac-header">
+              <div class="mac-dots">
+                <div class="mac-dot mac-dot--red"></div>
+                <div class="mac-dot mac-dot--yellow"></div>
+                <div class="mac-dot mac-dot--green"></div>
+              </div>
+              <div class="mac-address-bar">
+                <span>💻 PC 데스크톱 버전 (카운터 모니터용)</span>
+              </div>
+            </div>
+            <div class="mac-iframe-box" style="height: 540px;">
+              <iframe src="index.html?view=pc" class="mac-iframe" title="PC 뷰"></iframe>
+            </div>
+          </div>
+
+          <!-- 우측 모바일 폰 -->
+          <div class="phone-mockup-wrapper">
+            <div class="phone-mockup" style="height: 590px; width: 310px; border-radius: 40px; padding: 10px;">
+              <div class="phone-speaker" style="top: 18px; width: 90px; height: 18px;"></div>
+              <div class="phone-screen" style="border-radius: 30px;">
+                <iframe src="index.html?view=mobile" class="phone-iframe" title="모바일 뷰"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 비포 & 애프터 업무 변화 비교 -->
+    <section class="section-wrap">
+      <div class="section-header">
+        <span class="section-tag">BEFORE &amp; AFTER</span>
+        <h3 class="section-title">1인 공방의 하루가 어떻게 달라졌을까요?</h3>
+        <p class="section-desc">지친 마감 업무를 없애고 본업인 향수 조향과 고객 응대에만 온전히 집중합니다.</p>
+      </div>
+
+      <div class="compare-grid">
+        <div class="compare-card compare-card--before">
+          <span class="compare-card__badge">기존 수기 작성 방식 (BEFORE)</span>
+          <h4 class="compare-card__title">종이 메모 & 저녁 엑셀 입력</h4>
+          <ul class="compare-list">
+            <li>❌ 수업 중 손에 오일이 묻은 채로 메모지에 끄적이다 분실</li>
+            <li>❌ "현금이었나 카드였나?" 저녁 마감 때 가물가물한 기억</li>
+            <li>❌ 하루 수업이 끝난 뒤 피곤한 몸으로 20~30분간 엑셀 타이핑</li>
+            <li>❌ 월말 매출 결산 때 영수증과 메모를 일일이 대조하는 극심한 피로</li>
+          </ul>
+        </div>
+
+        <div class="compare-card compare-card--after">
+          <span class="compare-card__badge">AI 사장님 비서 도입 후 (AFTER)</span>
+          <h4 class="compare-card__title">말 한마디로 1초 만에 구글 시트 저장</h4>
+          <ul class="compare-list">
+            <li>✅ "오늘 원데이 2명 7만원 카드, 인스타" 말 한마디로 5초 만에 완료</li>
+            <li>✅ Gemini AI가 7개 항목을 0.1초 만에 완벽하게 자동 분류</li>
+            <li>✅ 구글 스프레드시트 「매출내역」에 실시간 한 줄 기록 및 합계 갱신</li>
+            <li>✅ 수업 끝나자마자 즉시 마감 완료! (저녁 장부 작업 소요 시간 0초)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 4단계 자동화 시스템 아키텍처 -->
+    <section class="section-wrap">
+      <div class="section-header">
+        <span class="section-tag">ARCHITECTURE</span>
+        <h3 class="section-title">완성된 AI 데이터 파이프라인</h3>
+        <p class="section-desc">음성 발화부터 클라우드 시트 반영까지 100% 매끄럽게 연결된 기술 구조입니다.</p>
+      </div>
+
+      <div class="flow-grid">
+        <div class="flow-step-card">
+          <span class="flow-step-num">STEP 01</span>
+          <div class="flow-step-title">한국어 음성 발화</div>
+          <div class="flow-step-desc">수업 종료 후 자연스러운 일상 구어체로 수업 인원, 금액, 결제수단 등을 편하게 말합니다.</div>
+          <div class="flow-step-tech">Web Speech API</div>
+        </div>
+
+        <div class="flow-step-card">
+          <span class="flow-step-num">STEP 02</span>
+          <div class="flow-step-title">AI 자연어 구조화</div>
+          <div class="flow-step-desc">비정형 한국어 문장을 날짜, 구분, 인원, 금액, 결제수단, 유입경로, 메모 7대 데이터로 정밀 추출합니다.</div>
+          <div class="flow-step-tech">Google Gemini Flash</div>
+        </div>
+
+        <div class="flow-step-card">
+          <span class="flow-step-num">STEP 03</span>
+          <div class="flow-step-title">2중 보안 및 검증</div>
+          <div class="flow-step-desc">사장님 전용 PIN(0306) 및 Google OAuth 2.0 본인 계정 토큰으로 안전하게 통신합니다.</div>
+          <div class="flow-step-tech">Google Identity Services</div>
+        </div>
+
+        <div class="flow-step-card">
+          <span class="flow-step-num">STEP 04</span>
+          <div class="flow-step-title">시트 실시간 저장</div>
+          <div class="flow-step-desc">구글 스프레드시트 「영일대향수공방 매출 장부」에 즉시 한 줄 추가되며 대시보드가 갱신됩니다.</div>
+          <div class="flow-step-tech">Google Apps Script Web App</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 아틀리에 실사 갤러리 스트립 -->
+    <section class="section-wrap">
+      <div class="section-header">
+        <span class="section-tag">ATELIER GALLERY</span>
+        <h3 class="section-title">영일대향수공방 공식 브랜드 비주얼</h3>
+        <p class="section-desc">포항 영일대 바다 풍경과 감성 조향 아틀리에의 실제 현장입니다.</p>
+      </div>
+
+      <div class="gallery-strip">
+        <div class="gallery-strip-item">
+          <img src="images/hero-ocean.jpg" alt="영일대 바다 풍경" />
+          <div class="gallery-strip-caption">영일대 통창 오션뷰</div>
+        </div>
+        <div class="gallery-strip-item">
+          <img src="images/about-atelier.jpg" alt="원목 조향대" />
+          <div class="gallery-strip-caption">60+ 프리미엄 향료 조향대</div>
+        </div>
+        <div class="gallery-strip-item">
+          <img src="images/gallery-blending.jpg" alt="조향 블렌딩" />
+          <div class="gallery-strip-caption">1:1 맞춤형 조향 클래스</div>
+        </div>
+        <div class="gallery-strip-item">
+          <img src="images/gallery-bottle.jpg" alt="시그니처 향수 보틀" />
+          <div class="gallery-strip-caption">수강생 완성 시그니처 향수</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. 하단 액션 콜아웃 푸터 -->
+    <footer class="footer-cta">
+      <div class="footer-cta__text">
+        <h2>지금 바로 사장님 비서를 사용해 보세요</h2>
+        <p>
+          수업이 끝난 뒤 말 한마디로 시작되는 가장 스마트한 1인 공방 비즈니스 자동화.<br />
+          휴대폰이나 PC 브라우저에서 바로 실행하실 수 있습니다.
+        </p>
+      </div>
+      <div class="footer-cta__actions">
+        <a href="index.html" class="nav-btn nav-btn--primary" style="padding: 14px 24px; font-size: 15px;">
+          🚀 사장님 비서 실행하기
+        </a>
+        <a href="https://script.google.com/macros/s/AKfycbyd-1z9LCSjyvlc6fRvRSyNGd5Savr1jKRiWxkIA9_THoc0fAeFINcoFXhiPkFt03mb/exec" target="_blank" rel="noopener" class="nav-btn nav-btn--outline" style="padding: 14px 22px; font-size: 15px; color:#1C2B3C;">
+          📊 연결된 구글 시트 확인
+        </a>
+      </div>
+    </footer>
+
+    <div class="footer-bottom-info">
+      영일대향수공방 (YEONGILDAE ATELIER) · AI Business Automation Project · All Rights Reserved
+    </div>
+  </main>
+
+  <script>
+    /**
+     * 목업 뷰 모드 전환 (휴대폰 / PC / 듀얼 뷰)
+     */
+    function switchMockupView(viewType) {
+      const tabs = [
+        { id: 'mobile', btn: 'tabBtnMobile', pane: 'paneMobileView' },
+        { id: 'pc', btn: 'tabBtnPc', pane: 'panePcView' },
+        { id: 'dual', btn: 'tabBtnDual', pane: 'paneDualView' }
+      ];
+
+      tabs.forEach(t => {
+        const btnEl = document.getElementById(t.btn);
+        const paneEl = document.getElementById(t.pane);
+        if (t.id === viewType) {
+          if (btnEl) {
+            btnEl.classList.add('active');
+            btnEl.setAttribute('aria-selected', 'true');
+          }
+          if (paneEl) paneEl.classList.add('active');
+        } else {
+          if (btnEl) {
+            btnEl.classList.remove('active');
+            btnEl.setAttribute('aria-selected', 'false');
+          }
+          if (paneEl) paneEl.classList.remove('active');
+        }
+      });
+    }
+
+    // URL 파라미터(?view=pc / ?view=mobile / ?view=dual)가 있으면 해당 탭 우선 활성화
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const view = params.get('view');
+      if (view === 'pc' || view === 'mobile' || view === 'dual') {
+        switchMockupView(view);
+      }
+    });
+  </script>
+</body>
+</html>

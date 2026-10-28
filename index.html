@@ -243,6 +243,62 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* ==========================================================================
+       PC 데스크톱 와이드 모드 & 반응형 지원
+       ========================================================================== */
+    .cover-entry-btn {
+      background: rgba(212, 184, 149, 0.25) !important;
+      border: 1px solid rgba(212, 184, 149, 0.5) !important;
+      color: #F7F1E8 !important;
+    }
+
+    .cover-entry-btn:hover {
+      background: rgba(212, 184, 149, 0.45) !important;
+      color: #FFFFFF !important;
+    }
+
+    .view-toggle-btn {
+      display: none;
+      background: rgba(93, 156, 236, 0.25);
+      border: 1px solid rgba(93, 156, 236, 0.5);
+    }
+
+    .view-toggle-btn:hover {
+      background: rgba(93, 156, 236, 0.45);
+    }
+
+    @media (min-width: 860px) {
+      .view-toggle-btn {
+        display: inline-flex;
+      }
+    }
+
+    /* PC 와이드 모드 활성화 시 (body.is-pc-mode) */
+    body.is-pc-mode .container {
+      max-width: 1060px;
+      padding: 20px;
+    }
+
+    body.is-pc-mode .app-layout-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    body.is-pc-mode .layout-side-col #paneDashboard {
+      display: block !important;
+      animation: none;
+    }
+
+    body.is-pc-mode .tab-nav {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    body.is-pc-mode #tabBtnDashboard {
+      display: none;
+    }
+
     /* 아틀리에 비주얼 히어로 배너 (Tab 1 상단) */
     .atelier-hero-card {
       position: relative;
@@ -1072,6 +1128,20 @@
         <p>포항 영일대 오션뷰 감성 조향 아틀리에 · 매출 장부</p>
       </div>
       <div class="header-actions">
+        <!-- 표지 화면 바로가기 링크 -->
+        <a href="cover.html" class="icon-btn cover-entry-btn" title="프로젝트 표지 화면 (PC·모바일 쇼케이스)">
+          <svg class="svg-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          <span>표지 화면</span>
+        </a>
+        <!-- PC/모바일 모드 전환 토글 (와이드 스크린에서 활성화) -->
+        <button type="button" class="icon-btn view-toggle-btn" onclick="toggleViewMode()" title="화면 모드 전환 (PC/모바일)">
+          <span id="viewModeToggleIcon">💻</span>
+          <span id="viewModeToggleText">PC 와이드 뷰</span>
+        </button>
         <button type="button" class="icon-btn" onclick="openSettingsModal()" title="설정">
           <svg class="svg-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"/>
@@ -1130,7 +1200,10 @@
       </button>
     </nav>
 
-    <!-- TAB 1. 음성으로 말하기 -->
+    <!-- 앱 콘텐츠 영역 (PC 와이드 모드 시 2열 그리드로 자동 확장) -->
+    <div class="app-layout-grid" id="appLayoutGrid">
+      <div class="layout-main-col">
+        <!-- TAB 1. 음성으로 말하기 -->
     <div class="tab-pane active" id="paneVoice">
       <!-- 아틀리에 공식 오션뷰 비주얼 배너 -->
       <div class="atelier-hero-card">
@@ -1374,7 +1447,10 @@
         </button>
       </section>
     </div>
+  </div><!-- /.layout-main-col -->
 
+  <!-- 우측 사이드 패널 (PC 와이드 뷰에서 실시간 장부 대시보드 표시) -->
+  <div class="layout-side-col">
     <!-- TAB 3. 매출 합계 및 최근 내역 5건 -->
     <div class="tab-pane" id="paneDashboard">
       <div class="dashboard-atelier-banner">
@@ -1431,7 +1507,9 @@
         </button>
       </section>
     </div>
-  </div>
+  </div><!-- /.layout-side-col -->
+</div><!-- /#appLayoutGrid -->
+</div><!-- /.container -->
 
   <!-- 설정 모달 -->
   <div id="settingsModal" class="modal-backdrop">
@@ -1513,10 +1591,11 @@
      * 원하시면 아래 DEFAULT_WEB_APP_URL 큰따옴표 안에 배포한 Apps Script 웹앱 주소를
      * 미리 넣어두셔도 되고, 그냥 화면의 [설정] 버튼에서 붙여넣으셔도 됩니다!
      */
-    const DEFAULT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyJuWrtu93BpSz6JC7Q_6AvWF9sjdFVra0T8NXrR9ayXLy96VVwLWCnuwh35KCktXVs/exec";
+    const DEFAULT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyd-1z9LCSjyvlc6fRvRSyNGd5Savr1jKRiWxkIA9_THoc0fAeFINcoFXhiPkFt03mb/exec";
     const OLD_WEB_APP_URLS = [
       "https://script.google.com/macros/s/AKfycbxocZmFDn6tBl1zvvdTcFT4w2LFfog7QHdUCR4kVcCRFrHE5dIVw3RuvxCRrjAUJlMj/exec",
-      "https://script.google.com/macros/s/AKfycbySMPCrArCHrAQw82N-uegMIM-rbm90tcKtGUFFUdWYyD1OrSqhYyrMwVgMaZQZ_UMK/exec"
+      "https://script.google.com/macros/s/AKfycbySMPCrArCHrAQw82N-uegMIM-rbm90tcKtGUFFUdWYyD1OrSqhYyrMwVgMaZQZ_UMK/exec",
+      "https://script.google.com/macros/s/AKfycbyJuWrtu93BpSz6JC7Q_6AvWF9sjdFVra0T8NXrR9ayXLy96VVwLWCnuwh35KCktXVs/exec"
     ];
     const DEFAULT_GOOGLE_CLIENT_ID = "";
     const REQUIRED_PIN = "0306";
@@ -1528,7 +1607,7 @@
     // 공방 선택지 목록 (질문 2번 답변 반영)
     const CATEGORY_OPTIONS = ["원데이 클래스", "커플 클래스", "단체/출강", "완제품 판매", "답례품", "키즈 클래스", "기타"];
     const PAYMENT_OPTIONS = ["카드", "계좌이체", "현금", "네이버페이", "포항사랑상품권", "기타"];
-    const CHANNEL_OPTIONS = ["인스타", "네이버(검색/예약)", "당근", "지인 추천", "워크인(지나가다 방문)", "재방문", "기타"];
+    const CHANNEL_OPTIONS = ["인스타", "네이버(검색/예약)", "당근", "지인 추천", "워크인(지нага다 방문)", "재방문", "기타"];
 
     let currentPinInput = "";
     let recognition = null;
@@ -1537,6 +1616,7 @@
     // 초기 실행
     window.addEventListener("DOMContentLoaded", () => {
       initUrlParams();
+      initViewMode();
       initPinLock();
       initGoogleAuth();
       initChoiceChips();
@@ -1551,6 +1631,56 @@
         loadDashboard();
       }
     });
+
+    /**
+     * PC 데스크톱 와이드 모드 및 모바일 모드 제어
+     */
+    function initViewMode() {
+      const params = new URLSearchParams(window.location.search);
+      const view = params.get("view");
+      const saved = localStorage.getItem("yd_view_mode");
+
+      if (view === "pc" || (view !== "mobile" && (saved === "pc" || window.innerWidth >= 1024))) {
+        enablePcMode(true);
+      } else {
+        enablePcMode(false);
+      }
+
+      window.addEventListener("resize", () => {
+        // iframe 내부가 아닐 때 창 크기에 따라 자동 조절
+        if (!view && !localStorage.getItem("yd_view_mode")) {
+          if (window.innerWidth >= 1024) enablePcMode(true);
+          else if (window.innerWidth < 860) enablePcMode(false);
+        }
+      });
+    }
+
+    function toggleViewMode() {
+      const isCurrentlyPc = document.body.classList.contains("is-pc-mode");
+      const nextPc = !isCurrentlyPc;
+      enablePcMode(nextPc);
+      localStorage.setItem("yd_view_mode", nextPc ? "pc" : "mobile");
+    }
+
+    function enablePcMode(enable) {
+      const iconEl = document.getElementById("viewModeToggleIcon");
+      const textEl = document.getElementById("viewModeToggleText");
+
+      if (enable) {
+        document.body.classList.add("is-pc-mode");
+        if (iconEl) iconEl.textContent = "📱";
+        if (textEl) textEl.textContent = "모바일 뷰 전환";
+        // 대시보드 탭에 있었으면 왼쪽 입력칸이 비지 않도록 음성 탭으로 맞춤
+        const activeBtn = document.querySelector(".tab-btn.active");
+        if (activeBtn && activeBtn.id === "tabBtnDashboard") {
+          switchTab("voice");
+        }
+      } else {
+        document.body.classList.remove("is-pc-mode");
+        if (iconEl) iconEl.textContent = "💻";
+        if (textEl) textEl.textContent = "PC 와이드 뷰";
+      }
+    }
 
     /**
      * URL 파라미터(?gas=...&cid=...)로 접속 시 자동으로 설정값을 저장해 휴대폰 설정을 편하게 함
